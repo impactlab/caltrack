@@ -15,9 +15,59 @@ Data Cleaning and Munging
 
 A number of cleaning steps are necessary to use the raw data.
 
-### Project Filtering
+### Consumption Data Cleaning
 
-- Filter out any projects for which there is not an `sa_id` found in the cross reference files for either `Electric Service ID` or `Gas Service ID`
+**Elec Traces**
+
+* Remove duplicates
+  * No duplicates in monthly data
+* Add leading zeroes to `PREM_ID` where missing (length == 8 or 9) in monthly traces.
+
+* 7702 elec monthly traces with unique SA_ID
+
+**Gas Traces**
+
+* Remove duplicates
+  * No duplicates in monthly data
+* Add leading zeroes to `PREM_ID` where missing (length == 8 or 9) in monthly traces.
+
+* 6919 gas monthly traces with unique SA_ID
+
+**Elec Xrefs**
+
+* Add leading zeroes to `char_prem_id` where missing (length == 8 or 9). Appear to have been lost during PGE's export process 
+
+**For Caltrack data analysis: traces with `is_net_metered=Y` should be excluded from analysis.**
+
+**Gas Xrefs**
+
+* Concatenate two gas xref files
+
+* Add leading zeroes to `char_prem_id` where missing (length == 8 or 9). Appear to have been lost during PGE's export process
+
+**Projects**
+
+* Concatenate three project files together
+
+* Estimate project dates using Caltrack procedure described below
+
+* Assign each project a `char_prem_id` using both elec and gas xref file 
+
+    * Both `Gas Service ID` and `Electric Service ID` always map to the same `char_prem_id`
+
+* Remove any project that did not get a `char_prem_id`
+
+    * 4220 of 4358 projects received a prem id.
+
+* Merge projects with identical `char_prem_id`
+
+    * Earliest Work Start Date in merged project
+    * Latest Work Finish Date in merged project
+    * 4220 projects before merging premids
+    * 4206 projects after merging premids
+
+* Remove `Gas Service ID` and `Electric Service ID` from output. (Misleading since matching should be done with `char_prem_id` after cleaning)
+
 
 ### *Deduplication*
 
