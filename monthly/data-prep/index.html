@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  
+  <link rel="shortcut icon" href="../../img/favicon.ico">
+  <title>Data Preparation for Monthly Methods - CalTRACK Technical Documentation</title>
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="../../css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../css/theme_extra.css" type="text/css" />
+  <link rel="stylesheet" href="../../css/highlight.css">
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Data Preparation for Monthly Methods";
+    var mkdocs_page_input_path = "monthly/data-prep.md";
+    var mkdocs_page_url = "/monthly/data-prep/";
+  </script>
+  
+  <script src="../../js/jquery-2.1.1.min.js"></script>
+  <script src="../../js/modernizr-2.8.3.min.js"></script>
+  <script type="text/javascript" src="../../js/highlight.pack.js"></script> 
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+      <div class="wy-side-nav-search">
+        <a href="../.." class="icon icon-home"> CalTRACK Technical Documentation</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+	<ul class="current">
+          
+            <li>
+    <li class="toctree-l1 ">
+        <a class="" href="../..">Home</a>
+        
+    </li>
+<li>
+          
+            <li>
+    <ul class="subnav">
+    <li><span>Getting Started Guides</span></li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../../guides/v1guide/">Guide to Version 1.0 Monthly Methods</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../../guides/v1.1guide/">Guide to Version 1.1 Daily Methods</a>
+        
+    </li>
+
+        
+    </ul>
+<li>
+          
+            <li>
+    <ul class="subnav">
+    <li><span>Monthly</span></li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../data-sources/">Data Sources for Monthly Methods</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 current">
+        <a class="current" href="./">Data Preparation for Monthly Methods</a>
+        
+            <ul>
+            
+                <li class="toctree-l3"><a href="#caltrack-beta-test-data-preparation-guidelines">CalTRACK Beta Test Data Preparation Guidelines</a></li>
+                
+                    <li><a class="toctree-l4" href="#data-cleaning-and-munging">Data Cleaning and Munging</a></li>
+                
+            
+                <li class="toctree-l3"><a href="#data-integration">Data Integration</a></li>
+                
+                    <li><a class="toctree-l4" href="#prepared-data-summary-statistics-for-comparison">Prepared Data Summary Statistics for Comparison</a></li>
+                
+            
+            </ul>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../analysis/">Analysis of Monthly Data</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../aggregation/">Aggregration of Site-level Savings</a>
+        
+    </li>
+
+        
+    </ul>
+<li>
+          
+        </ul>
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../..">CalTRACK Technical Documentation</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../..">Docs</a> &raquo;</li>
+    
+      
+        
+          <li>Monthly &raquo;</li>
+        
+      
+    
+    <li>Data Preparation for Monthly Methods</li>
+    <li class="wy-breadcrumbs-aside">
+      
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <h1 id="caltrack-beta-test-data-preparation-guidelines">CalTRACK Beta Test Data Preparation Guidelines</h1>
+<p>Data Cleaning and Quality Checks for the CalTRACK Beta Test will consist of three main tasks</p>
+<ol>
+<li>Explore raw data sources with non-standard summary statistics</li>
+<li>Perform data cleaning and integration procedures on raw data</li>
+<li>Calculate and report prepared data summary statistics</li>
+</ol>
+<p>=======</p>
+<h2 id="data-cleaning-and-munging">Data Cleaning and Munging</h2>
+<p>A number of cleaning steps are necessary to use the raw data.</p>
+<h3 id="project-filtering">Project Filtering</h3>
+<ul>
+<li>Filter out any projects for which there is not an <code>sa_id</code> found in the cross reference files for either <code>Electric Service ID</code> or <code>Gas Service ID</code></li>
+</ul>
+<h3 id="deduplication"><em>Deduplication</em></h3>
+<ul>
+<li>
+<p>If a home appears multiple times within a project database, and the project dates are the same the most complete record for that home will be the record used in CalTRACK</p>
+</li>
+<li>
+<p>If a home appears multiple times within a project database and the project dates differ because there are multiple measures installed associated with the same incentive program, the start date of the intervention will be the earliest of the project start dates across projects and the end date for the intervention will be the latest of the project end dates</p>
+</li>
+<li>
+<p>There are a small number of duplicate traces – consumption traces with unique SAs (though identical SPIDs) and identical consumption data over the time interval.</p>
+</li>
+<li>
+<p>If two duplicate records have identical consumption traces and date ranges, drop one at random</p>
+</li>
+<li>
+<p>If two duplicate records have identical consumption traces but different date ranges select the more complete record having more dates. If the dates are contiguous, or there are overlapping dates with the same usage values, combine the two traces into a single trace.</p>
+</li>
+<li>
+<p>If they have the same date ranges, but different usage values, the project is flagged and the record is excluded from the sample.</p>
+</li>
+</ul>
+<h3 id="creating-work-start-and-work-end-dates-from-raw-project-data">Creating Work Start and Work End dates from raw project data</h3>
+<p>The dates for CalTRACK Beta Test come from the following Final CalTRACK files provided by Build it Green:</p>
+<p><code>CalTRACK (AHU) from 1_1_14__6_30_15_v2_FINAL_090816.csv</code></p>
+<p><code>CalTRACK (AHU) from 7_1_15__6_30_16_v2_FINAL_090816.csv</code></p>
+<p><code>CalTRACK (AHUP) from 1_1_14__6_30_15_v2_FINAL_090816.csv</code></p>
+<p>The following rules are used for determining <code>work start dates</code>:</p>
+<ul>
+<li>
+<p>From the updated ‘AHUP’ file “CalTRACK (AHUP) from 1_1_14__6_30_15_v2_FINAL_090816”</p>
+<ul>
+<li>Column G – “Notice to Proceed Issued” (Best Proxy for ‘Work Start’)</li>
+</ul>
+</li>
+<li>
+<p>From the updated ‘AHU with correlated XML files’ file “CalTRACK (AHU) from 1_1_14__6_30_15_v2_FINAL_090816”</p>
+<ul>
+<li>Column F – “Initial Approval Date” (Best Proxy for ‘Work Start’)</li>
+</ul>
+</li>
+<li>
+<p>From the updated ‘AHU Control Group (no XML files)’ file “CalTRACK (AHU) from 7_1_15__6_30_16_v2_FINAL_090816”</p>
+<ul>
+<li>Column F – “Initial Approval Date” (Best Proxy for ‘Work Start’)</li>
+</ul>
+</li>
+</ul>
+<p>The following rules are used for determining <code>work end dates</code>:</p>
+<ul>
+<li>
+<p>From the updated ‘AHUP’ file “CalTRACK (AHUP) from 1_1_14__6_30_15_v2_FINAL_090816”</p>
+<ul>
+<li>Column H – “Full Application Started” (Best Proxy for ‘Work Finished’)</li>
+<li>Please Note – Column J – “Full Application Submitted” can represent a better proxy for ‘Work Finished’, if the project was not returned for correction(s) during the QA review process (i.e., if there is a date in Column I – “Full Application Returned”, it got returned for correction). If a project gets returned for correction, then Column J’s “Full Application Submitted” date becomes, effectively, a “Full Application ‘Re-submitted’”, and no longer represents a good proxy for ‘Work Finished’ as it is +1-10 Days (or more) removed at that point.</li>
+</ul>
+</li>
+<li>
+<p>From the updated ‘AHU with correlated XML files’ file “CalTRACK (AHU) from 1_1_14__6_30_15_v2_FINAL_090816”</p>
+<ul>
+<li>Column G – “Initial Submission Date” (Best Proxy for ‘Work Finished’)</li>
+</ul>
+</li>
+<li>
+<p>From the updated ‘AHU Control Group (no XML files)’ file “CalTRACK (AHU) from 7_1_15__6_30_16_v2_FINAL_090816”</p>
+<ul>
+<li>Column G – “Initial Submission Date” (Best Proxy for ‘Work Finished’)</li>
+</ul>
+</li>
+</ul>
+<h3 id="missing-values-imputation"><em>Missing Values &amp; Imputation</em></h3>
+<p><strong>Weather</strong></p>
+<ul>
+<li>
+<p>Hourly</p>
+<ul>
+<li>
+<p>Hourly weather data from GSOD will not be imputed</p>
+</li>
+<li>
+<p>Days with more than 5 contiguous hours of missing data will be thrown out</p>
+</li>
+</ul>
+</li>
+<li>
+<p>Daily</p>
+<ul>
+<li>
+<p>GSOD daily averages will not be imputed</p>
+</li>
+<li>
+<p>Months with more than than 3 missing days will be thrown out</p>
+</li>
+</ul>
+</li>
+</ul>
+<p><strong>Usage</strong></p>
+<ul>
+<li>
+<p>Missing values where the cumulative value is in the following period, the cumulative number of days between the two periods will be used to generate the UPD for that period</p>
+</li>
+<li>
+<p>Missing usage values with no cumulative amount in the following period will be counted against data sufficiency requirements</p>
+</li>
+<li>
+<p>Homes with Net Metering will be dropped from the analysis</p>
+</li>
+</ul>
+<h3 id="estimated-values-deletion"><em>Estimated values &amp; deletion</em></h3>
+<ul>
+<li>Estimated usage data will be used for estimation, but estimation flags will be added to the post-estimation</li>
+</ul>
+<h3 id="extreme-values"><em>Extreme values</em></h3>
+<p><strong>Usage</strong></p>
+<ul>
+<li>
+<p>Negative values or values with reverse direction of flow will be treated as missing and count against sufficiency criterion. The account will also be flag within CalTRACK for possible net metering if it does not currently contain a net metering flag</p>
+</li>
+<li>
+<p>It is assumed at all IOUs comply with DASMMD.</p>
+</li>
+<li>
+<p>AMI data will have the DASMMD pass/fail criterion rerun, with failing values coded as missing. ((highest peak - third highest peak)/third highest peak) &lt;= 1.8</p>
+</li>
+</ul>
+<p><strong>Project Data</strong></p>
+<ul>
+<li>
+<p>Extreme project lengths (gap between project start date and project end date longer than 3 months) will be treated as true and impact estimation only through data sufficiency requirements.</p>
+</li>
+<li>
+<p>Files without project start dates are thrown out</p>
+</li>
+</ul>
+<h3 id="sum-check"><em>Sum Check</em></h3>
+<p>If both monthly and AMI data are available for a home, CalTRACK will run a sumcheck and use the DASMMD criterion for pass/fail. If it fails, the home is flagged and treated as having missing usage data so no estimation is run on it.</p>
+<h3 id="miscoded-values"><em>Miscoded values</em></h3>
+<ul>
+<li>Miscoded strings in project data will be deduplicated and matched (fuzzily) to closest value</li>
+</ul>
+<h3 id="miscoded-dates"><em>Miscoded dates</em></h3>
+<ul>
+<li>
+<p>Implausible day values (&gt;31) will be coded as the beginning of month if project start date and end of month if project end date so that the entire month included in the intervention window</p>
+</li>
+<li>
+<p>Implausible month and year values will be flagged and that home not included in estimation.</p>
+</li>
+</ul>
+<h3 id="data-sufficiency"><em>Data sufficiency</em></h3>
+<p><strong>Usage (Monthly)</strong></p>
+<ul>
+<li>
+<p>12 complete months pre-retrofit for monthly billing data to qualify for estimation or 24 months with up to 2 missing values from different, non-contiguous months</p>
+</li>
+<li>
+<p>Post retrofit data sufficiency for estimation will be dealt with in post-estimation model fit criterion</p>
+</li>
+<li>
+<p>Total annual savings estimates will require 12 months post-retrofit</p>
+</li>
+</ul>
+<p><strong>Usage (AMI)</strong></p>
+<ul>
+<li>
+<p>12 months pre-retrofit</p>
+</li>
+<li>
+<p>Post retrofit data sufficiency for estimation will be dealt with in post-estimation model fit criterion</p>
+</li>
+<li>
+<p>Total annual savings estimates will require 12 months post-retrofit</p>
+</li>
+</ul>
+<p><strong>Weather</strong></p>
+<ul>
+<li>There should not be problems with data sufficiency for weather</li>
+</ul>
+<h3 id="project-or-home-characteristics"><em>Project or Home Characteristics</em></h3>
+<ul>
+<li>Exclude homes with PV for whom solar production data is not available</li>
+</ul>
+<h3 id="value-adjustments-if-values-change-during-performance-period"><em>Value Adjustments (if values change during performance period)</em></h3>
+<h3 id="usage"><strong>Usage</strong></h3>
+<ul>
+<li>
+<p>Use most up-to-date meter read for</p>
+</li>
+<li>
+<p>Log prior values and prior estimates</p>
+</li>
+</ul>
+<p><strong>Project data</strong></p>
+<ul>
+<li>Use most up to date values for estimation</li>
+</ul>
+<p><strong>Weather data</strong></p>
+<ul>
+<li>Use most recent daily weather value for estimation</li>
+</ul>
+<h1 id="data-integration">Data Integration</h1>
+<ul>
+<li>Matching project data<ul>
+<li>Matching will be done using the cross-reference files contain the sa_id and sp_id mapping between the project data id fields and the consumption data id fields.</li>
+</ul>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Column Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>sa_id</td>
+<td>Corresponds to <code>Electric Service ID</code> or <code>Gas Service ID</code> in projects file</td>
+</tr>
+<tr>
+<td>sp_id</td>
+<td>Corresponds to <code>SPID</code> in electricity consumption file and <code>Service Point</code> in natural gas file</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>
+<p>Matching weather stations to projects</p>
+<ul>
+<li>Weather station mapping will be done using the 86 station standard mapping of zip code to CZ2010 weather files provided in the <code>/data-source</code> directory</li>
+</ul>
+</li>
+<li>
+<p>Unmatched data</p>
+<ul>
+<li>Projects that are unmatched to usage data will be listed in CalTRACK for data integrity reporting, but will not be included in any estimation procedures and will not have estimated savings</li>
+</ul>
+</li>
+</ul>
+<h2 id="prepared-data-summary-statistics-for-comparison">Prepared Data Summary Statistics for Comparison</h2>
+<p>To ensure that beta testers are working with the same datasets and that we are characterizing the datasets in a way that is helpful for other members of the technical working group as well as the general public, each beta tester will generate a set of summary statistics and perform a set of data quality checks that can be shared with the larger group through csvs saved to this repository. There will be four cleaned data reports generated by each beta tester: a project data summary file, an hourly electric summary file, a daily gas summary file, and data integration summary file. Each file will be a .csv and will have the following general format:</p>
+<table>
+<thead>
+<tr>
+<th>Summary Stat</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Number of Observations</td>
+<td>4321</td>
+</tr>
+<tr>
+<td>Number of Fields</td>
+<td>4</td>
+</tr>
+<tr>
+<td>Min Work Start Date</td>
+<td>Jan, 21, 2014</td>
+</tr>
+<tr>
+<td>Max Work Start Date</td>
+<td>June 23, 2015</td>
+</tr>
+</tbody>
+</table>
+<p>The specifics for each summary file are below:</p>
+<h3 id="combined-project-data-summary-file">Combined Project Data Summary File</h3>
+<p><strong>Output Filename: <code>project_data_summary_NAME_OF_TESTER.csv</code></strong></p>
+<p>Apply project filtering rules, then compute the following statistics on the filtered list of projects:</p>
+<h4 id="included-summary-statistics">Included Summary statistics</h4>
+<ul>
+<li>Total number of records</li>
+<li>Number of unique project electric SAIDs</li>
+<li>Top 10 zip codes by count<ul>
+<li>Sort by descending counts,</li>
+<li>For identical counts, sort by ascending zip code</li>
+</ul>
+</li>
+<li>Bottom ten zip codes by count<ul>
+<li>Sort by ascending counts,</li>
+<li>For identical counts, sort by ascending zip code</li>
+</ul>
+</li>
+<li>Min Work Start Date</li>
+<li>Max Work Start Date</li>
+<li>Average Work Start Date</li>
+<li>Work Start Date 10th percentile value</li>
+<li>Work Start Date 20th percentile value</li>
+<li>Work Start Date 30th percentile value</li>
+<li>Work Start Date 40th percentile value</li>
+<li>Work Start Date 50th percentile value</li>
+<li>Work Start Date 60th percentile value</li>
+<li>Work Start Date 70th percentile value</li>
+<li>Work Start Date 80th percentile value</li>
+<li>Work Start Date 90th percentile value</li>
+<li>Min Work End Date</li>
+<li>Max Work End Date</li>
+<li>Average Work End Date</li>
+<li>Work End Date 10th percentile value</li>
+<li>Work End Date 20th percentile value</li>
+<li>Work End Date 30th percentile value</li>
+<li>Work End Date 40th percentile value</li>
+<li>Work End Date 50th percentile value</li>
+<li>Work End Date 60th percentile value</li>
+<li>Work End Date 70th percentile value</li>
+<li>Work End Date 80th percentile value</li>
+<li>Work End Date 90th percentile value</li>
+</ul>
+<p><em>Formatting</em></p>
+<ul>
+<li>Truncate dates to the nearest day</li>
+<li>Format dates as YYYY-MM-DD</li>
+</ul>
+<h3 id="prepared-hourly-electricity-data-summary-file">Prepared Hourly Electricity Data Summary File</h3>
+<p><strong>Output Filename: <code>hourly_electricity_data_summary_NAME_OF_TESTER.csv</code></strong></p>
+<h4 id="included-summary-statistics_1">Included Summary statistics</h4>
+<ul>
+<li>Total number of usage records</li>
+<li>Number of unique SPIDs</li>
+<li>Total number of missing hours across all usage records</li>
+<li>Total number of estimated hours across all usage records</li>
+<li>Number of net metering accounts dropped from sample</li>
+<li>Top 10 users by total use</li>
+<li>Bottom 10 users by total use</li>
+<li>Min Datetime stamp across all usage records</li>
+<li>Max Datetime stamp across all usage records</li>
+<li>Average Datetime stamp across all usage records</li>
+<li>Min use across all usage records</li>
+<li>Max use across all usage records</li>
+<li>Average use across all usage records</li>
+<li>Use across all usage records 10th percentile value</li>
+<li>Use across all usage records 20th percentile value</li>
+<li>Use across all usage records 30th percentile value</li>
+<li>Use across all usage records 40th percentile value</li>
+<li>Use across all usage records 50th percentile value</li>
+<li>Use across all usage records 60th percentile value</li>
+<li>Use across all usage records 70th percentile value</li>
+<li>Use across all usage records 80th percentile value</li>
+<li>Use across all usage records 90th percentile value</li>
+</ul>
+<h3 id="prepared-daily-gas-data-summary-file">Prepared Daily Gas Data Summary File</h3>
+<p><strong>Output Filename: <code>daily_gas_data_summary_NAME_OF_TESTER.csv</code></strong></p>
+<h4 id="included-summary-statistics_2">Included Summary statistics</h4>
+<ul>
+<li>Total number of records</li>
+<li>Number of unique SPIDs</li>
+<li>Total number of missing days across all usage records</li>
+<li>Total number of estimated hours across all usage records</li>
+<li>Top 10 users by total use</li>
+<li>Bottom 10 users by total use</li>
+<li>Min Datetime stamp across all usage records</li>
+<li>Max Datetime stamp across all usage records</li>
+<li>Average Datetime stamp across all usage records</li>
+<li>Min use across all usage records</li>
+<li>Max use across all usage records</li>
+<li>Average use across all usage records</li>
+<li>Use across all usage records 10th percentile value</li>
+<li>Use across all usage records 20th percentile value</li>
+<li>Use across all usage records 30th percentile value</li>
+<li>Use across all usage records 40th percentile value</li>
+<li>Use across all usage records 50th percentile value</li>
+<li>Use across all usage records 60th percentile value</li>
+<li>Use across all usage records 70th percentile value</li>
+<li>Use across all usage records 80th percentile value</li>
+<li>Use across all usage records 90th percentile value</li>
+</ul>
+<h3 id="data-integration-summary-file">Data Integration Summary File</h3>
+<p><strong>Output Filename: <code>data_integration_electricity_summary_NAME_OF_TESTER.csv</code></strong></p>
+<h4 id="included-summary-statistics_3">Included Summary statistics</h4>
+<ul>
+<li>Number of unique SAIDs in joined data</li>
+<li>Number of unique SPIDs in hourly electricity data</li>
+<li>Number of unique SPIDs in monthly electricity data</li>
+<li>Number of unique SPIDs in the electricity cross reference dataset</li>
+<li>Number of unique SPIDS in the gas cross reference dataset</li>
+<li>Number of unique SAIDs in the electricity cross reference dataset</li>
+<li>Number of unique SAIDs in the gas cross reference dataset</li>
+<li>% Records successfully matched between hourly electricity data to project data<ul>
+<li>Frequency counts of invalid rows from missing sa_id</li>
+<li>Frequency counts of invalid rows from missing sp_id</li>
+</ul>
+</li>
+<li>% Records successfully matched between daily gas data to project data<ul>
+<li>Frequency counts of invalid rows from missing sa_id</li>
+<li>Frequency counts of invalid rows from missing sp_id</li>
+</ul>
+</li>
+<li>% Records successfully matched between hourly electricity data to project data<ul>
+<li>Frequency counts of invalid rows from missing sa_id</li>
+<li>Frequency counts of invalid rows from missing sp_id</li>
+</ul>
+</li>
+<li>% Records successfully matched between monthly electricity data to project data<ul>
+<li>Frequency counts of invalid rows from missing sa_id</li>
+<li>Frequency counts of invalid rows from missing sp_id</li>
+</ul>
+</li>
+</ul>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../analysis/" class="btn btn-neutral float-right" title="Analysis of Monthly Data">Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href="../data-sources/" class="btn btn-neutral" title="Data Sources for Monthly Methods"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="http://www.mkdocs.org">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+	  
+        </div>
+      </div>
+
+    </section>
+    
+  </div>
+
+  <div class="rst-versions" role="note" style="cursor: pointer">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+      
+        <span><a href="../data-sources/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+      
+      
+        <span style="margin-left: 15px"><a href="../analysis/" style="color: #fcfcfc">Next &raquo;</a></span>
+      
+    </span>
+</div>
+    <script src="../../js/theme.js"></script>
+      <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+</body>
+</html>

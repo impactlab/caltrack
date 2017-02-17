@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  
+  <link rel="shortcut icon" href="../../img/favicon.ico">
+  <title>Data Sources for Monthly Methods - CalTRACK Technical Documentation</title>
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="../../css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../css/theme_extra.css" type="text/css" />
+  <link rel="stylesheet" href="../../css/highlight.css">
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Data Sources for Monthly Methods";
+    var mkdocs_page_input_path = "monthly/data-sources.md";
+    var mkdocs_page_url = "/monthly/data-sources/";
+  </script>
+  
+  <script src="../../js/jquery-2.1.1.min.js"></script>
+  <script src="../../js/modernizr-2.8.3.min.js"></script>
+  <script type="text/javascript" src="../../js/highlight.pack.js"></script> 
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+      <div class="wy-side-nav-search">
+        <a href="../.." class="icon icon-home"> CalTRACK Technical Documentation</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+	<ul class="current">
+          
+            <li>
+    <li class="toctree-l1 ">
+        <a class="" href="../..">Home</a>
+        
+    </li>
+<li>
+          
+            <li>
+    <ul class="subnav">
+    <li><span>Getting Started Guides</span></li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../../guides/v1guide/">Guide to Version 1.0 Monthly Methods</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../../guides/v1.1guide/">Guide to Version 1.1 Daily Methods</a>
+        
+    </li>
+
+        
+    </ul>
+<li>
+          
+            <li>
+    <ul class="subnav">
+    <li><span>Monthly</span></li>
+
+        
+            
+    <li class="toctree-l1 current">
+        <a class="current" href="./">Data Sources for Monthly Methods</a>
+        
+            <ul>
+            
+                <li class="toctree-l3"><a href="#data-sources-for-caltrack-beta-test">Data Sources for CalTRACK Beta Test</a></li>
+                
+                    <li><a class="toctree-l4" href="#output-data-format">Output data format</a></li>
+                
+            
+            </ul>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../data-prep/">Data Preparation for Monthly Methods</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../analysis/">Analysis of Monthly Data</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../aggregation/">Aggregration of Site-level Savings</a>
+        
+    </li>
+
+        
+    </ul>
+<li>
+          
+        </ul>
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../..">CalTRACK Technical Documentation</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../..">Docs</a> &raquo;</li>
+    
+      
+        
+          <li>Monthly &raquo;</li>
+        
+      
+    
+    <li>Data Sources for Monthly Methods</li>
+    <li class="wy-breadcrumbs-aside">
+      
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <h1 id="data-sources-for-caltrack-beta-test">Data Sources for CalTRACK Beta Test</h1>
+<p>Two major types of data files are supplied for the CalTRACK Beta: project data and consumption data. This data is linked with "cross-reference" files that define the mapping between ID columns in the two types of files.</p>
+<p>There are two types of project files, which have slightly different column types--<code>AHU</code> and <code>AHUP</code>--requiring different logic for determining baseline and reporting period dates.</p>
+<p>Consumption data is further broken down into five file types: 15 minutely electricity, hourly electricity, daily natural gas, monthly electricity, and monthly natural gas.</p>
+<p>The beta test set uses the following files:</p>
+<ul>
+<li>
+<p>Project:</p>
+<p><code>CalTRACK (AHUP) from 1_1_14__6_30_15_v2_FINAL_090816.csv</code>
+<code>CalTRACK (AHU) from 1_1_14__6_30_15_v2_FINAL_090816.csv</code>
+<code>CalTRACK (AHU) from 7_1_15__6_30_16_v2_FINAL_090816.csv</code></p>
+</li>
+<li>
+<p>Consumption:</p>
+<ul>
+<li>15 minutely electricity: <code>IDA.15MIN.SMY1.EES25162-EHUP.20160719161716.csv</code></li>
+<li>Hourly electricity: <code>IDA.60MIN.SMY1.EES25162-EHUP.20160719161716</code></li>
+<li>Daily natural gas: <code>EES25162_gasdy_160720.csv</code></li>
+<li>Monthly electricity: <code>EES25162.ERESBL13.XPT...</code></li>
+<li>Monthly natural gas: <code>EES25162.GRESBL13.XPT...</code></li>
+</ul>
+</li>
+<li>
+<p>Cross-reference</p>
+<ul>
+<li>Electricity: <code>EES25162_ELECINTV_XREF.csv</code></li>
+<li>Natural Gas: <code>EES25162_GASINTV_XREF.csv</code></li>
+</ul>
+</li>
+</ul>
+<p>The columns of interest in these files are as follows:</p>
+<p><strong>Project AHUP</strong></p>
+<table>
+<thead>
+<tr>
+<th>Column Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Application No.</td>
+<td>Project identifier</td>
+</tr>
+<tr>
+<td>Electric Service ID</td>
+<td>ID used for matching with consumption files</td>
+</tr>
+<tr>
+<td>Gas Service ID</td>
+<td>ID used for matching with consumption files</td>
+</tr>
+<tr>
+<td>Full Application Submitted</td>
+<td>Best proxy date for "Work Finished"</td>
+</tr>
+<tr>
+<td>Full Application Returned</td>
+<td>If populated, the project got returned for correction.</td>
+</tr>
+<tr>
+<td>Work Start Date</td>
+<td>Date retrofit started, <em>always empty</em></td>
+</tr>
+<tr>
+<td>Work Finish Date</td>
+<td>Date retrofit ended, <em>always empty</em></td>
+</tr>
+<tr>
+<td>Building ZIP Code</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Project AHU</strong></p>
+<table>
+<thead>
+<tr>
+<th>Column Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Application No.</td>
+<td>Project identifier</td>
+</tr>
+<tr>
+<td>Electric Service ID</td>
+<td>ID used for matching with consumption files</td>
+</tr>
+<tr>
+<td>Gas Service ID</td>
+<td>ID used for matching with consumption files</td>
+</tr>
+<tr>
+<td>Initial Submission Date</td>
+<td>Date of submission of energy retrofit project paperwork (after work completed)</td>
+</tr>
+<tr>
+<td>Work Start Date</td>
+<td>Date retrofit started</td>
+</tr>
+<tr>
+<td>Work Finish Date</td>
+<td>Date retrofit ended</td>
+</tr>
+<tr>
+<td>Building ZIP Code</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Consumption</strong></p>
+<p><em>Electricity</em></p>
+<table>
+<thead>
+<tr>
+<th>Column Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SPID</td>
+<td>Service Point ID - identifies the physical meter</td>
+</tr>
+<tr>
+<td>SA</td>
+<td>Service Agreement ID - generated when a customer signs a service agreement. Can be many SAs for a single SPID. Corresponds to <code>Electric Service ID</code> in project files.</td>
+</tr>
+<tr>
+<td>UOM</td>
+<td>Unit of Measure (KWH or THERM)</td>
+</tr>
+<tr>
+<td>DIR</td>
+<td>Direction of electricity flow (D=delivered, R=received)</td>
+</tr>
+<tr>
+<td>DATE</td>
+<td>Day for this row of consumption data</td>
+</tr>
+<tr>
+<td>RS</td>
+<td>Rate schedule of the associated SA_ID (ignored)</td>
+</tr>
+<tr>
+<td>APCT</td>
+<td>The actual percent of intervals are “Good” vs “Estimated”. (ignored)</td>
+</tr>
+<tr>
+<td>NAICS</td>
+<td>Associated with activity at the premise, only for non-residential (ignored)</td>
+</tr>
+<tr>
+<td>00:15, etc</td>
+<td>Consumption data for that interval</td>
+</tr>
+</tbody>
+</table>
+<p>There may be rows with non-zero consumption in both the R and D direction at the same timestamp (e.g. the customer both consumed power from the grid and delivered power back to the grid over the time interval).</p>
+<p><em>Natural Gas</em></p>
+<table>
+<thead>
+<tr>
+<th>Column Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Service Point</td>
+<td>Service Point ID - identifies the physical meter. Corresponds to <code>sp_id</code> in cross-reference table.</td>
+</tr>
+<tr>
+<td>Measurement Date</td>
+<td></td>
+</tr>
+<tr>
+<td>Therms per day</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Monthly Consumption</strong></p>
+<p><em>Electricity</em></p>
+<table>
+<thead>
+<tr>
+<th>Column Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SA_ID</td>
+<td>Service Agreement ID for cross-reference</td>
+</tr>
+<tr>
+<td>CDT__<code>i</code> (<code>i</code> [1,12])</td>
+<td>Current date the meter was read in SAS format</td>
+</tr>
+<tr>
+<td>PDT__<code>i</code> (<code>i</code> [1,12])</td>
+<td>Previous date the meter was read</td>
+</tr>
+<tr>
+<td>KWH__<code>i</code> (<code>i</code> [1,12])</td>
+<td>Usage (KWH)</td>
+</tr>
+</tbody>
+</table>
+<p>All other columns are ignored.</p>
+<p>SAS formatted dates count the number of days since Jan 1, 1960.</p>
+<p>Details on rate schedules: https://www.pge.com/tariffs/ERS.SHTML
+(Currently unused but might impact <code>interpretation</code> in the future.)</p>
+<p><em>Natural Gas</em></p>
+<table>
+<thead>
+<tr>
+<th>Column Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SA_ID</td>
+<td>Service Agreement ID for cross-reference</td>
+</tr>
+<tr>
+<td>CDT__<code>i</code> (<code>i</code> [1,12])</td>
+<td>Current date the meter was read in SAS format</td>
+</tr>
+<tr>
+<td>PDT__<code>i</code> (<code>i</code> [1,12])</td>
+<td>Previous date the meter was read</td>
+</tr>
+<tr>
+<td>THM__<code>i</code> (<code>i</code> [1,12])</td>
+<td>Usage (THM)</td>
+</tr>
+</tbody>
+</table>
+<p>See notes for monthly electricity consumption above for further details.</p>
+<p><strong>Cross-reference</strong></p>
+<p>Both types of cross-reference files contain the same columns of interest.</p>
+<table>
+<thead>
+<tr>
+<th>Column Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>sa_id</td>
+<td>Corresponds to <code>Electric Service ID</code> or <code>Gas Service ID</code> in projects file</td>
+</tr>
+<tr>
+<td>sp_id</td>
+<td>Corresponds to <code>SPID</code> in electricity consumption file and <code>Service Point</code> in natural gas file</td>
+</tr>
+</tbody>
+</table>
+<h2 id="output-data-format">Output data format</h2>
+<p>The cleaned data should be is as follows:</p>
+<p><strong>Projects</strong></p>
+<p><em>AHU</em></p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>project_id</td>
+<td>Project file, column <code>Application No.</code></td>
+</tr>
+<tr>
+<td>zipcode</td>
+<td>Project file, column <code>Building ZIP Code</code></td>
+</tr>
+<tr>
+<td>baseline_period_end</td>
+<td>Column <code>Work Start Date</code> unless empty, then column <code>Initial Approval Date</code></td>
+</tr>
+<tr>
+<td>reporting_period_start</td>
+<td>Column <code>Work Finish Date</code> unless empty, then column <code>Initial Submission Date</code></td>
+</tr>
+</tbody>
+</table>
+<p><em>AHUP</em></p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>project_id</td>
+<td>Project file, column <code>Application No.</code></td>
+</tr>
+<tr>
+<td>zipcode</td>
+<td>Project file, column <code>Building ZIP Code</code></td>
+</tr>
+<tr>
+<td>baseline_period_end</td>
+<td>Column <code>Notice to Proceed Issued</code> (Proxy for Work Start Date)</td>
+</tr>
+<tr>
+<td>reporting_period_start</td>
+<td>If <code>Full Application Returned</code> is empty, column <code>Full Application Submitted</code>, otherwise column <code>Full Application Started</code> (Proxy for Work Finish Date)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Consumption</strong></p>
+<p><em>Electricity</em></p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>project_id</td>
+<td>Column <code>Application No.</code> in project file. Use the consumption cross-reference file to map the <code>SPID</code> column to <code>Electric Service ID</code> in the projects file. <strong>There may be more than one matching project row</strong> – TBD how to handle this [1]</td>
+</tr>
+<tr>
+<td>start</td>
+<td>column <code>DATE</code> + column header for each time chunk</td>
+</tr>
+<tr>
+<td>interpretation</td>
+<td><code>ELECTRICITY_CONSUMPTION_SUPPLIED</code> (<code>E_C_S</code>) for D direction. <code>ELECTRICITY_ON_SITE_GENERATION_UNCONSUMED</code> (<code>E_OSG_U</code>) for R direction</td>
+</tr>
+<tr>
+<td>value</td>
+<td>Value of cell.</td>
+</tr>
+<tr>
+<td>estimated</td>
+<td><code>False</code></td>
+</tr>
+<tr>
+<td>label</td>
+<td><code>SA</code> + "-" + <code>SPID</code> + "-" + <code>DIR</code></td>
+</tr>
+<tr>
+<td>unit</td>
+<td><code>KWH</code></td>
+</tr>
+</tbody>
+</table>
+<p>[1] Only a single consumption trace matches multiple projects in the beta test data set.</p>
+<p><em>Natural Gas</em></p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>project_id</td>
+<td>Column <code>Application No.</code> in project file. Use the consumption cross-reference file to map the <code>Service Point</code> column to <code>Gas Service ID</code> in the projects file.</td>
+</tr>
+<tr>
+<td>start</td>
+<td>column <code>Measurement Date</code></td>
+</tr>
+<tr>
+<td>interpretation</td>
+<td><code>NATURAL_GAS_CONSUMPTION_SUPPLIED</code> (<code>NG_C_S</code>)</td>
+</tr>
+<tr>
+<td>value</td>
+<td>Column <code>Therms per Day</code></td>
+</tr>
+<tr>
+<td>estimated</td>
+<td><code>False</code></td>
+</tr>
+<tr>
+<td>label</td>
+<td><code>Service Point</code></td>
+</tr>
+<tr>
+<td>unit</td>
+<td><code>THM</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Monthly Consumption</strong></p>
+<p><em>Electricity</em></p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>project_id</td>
+<td>Column <code>SA_ID</code> corresponds to <code>Electric Service ID</code> in the projects file.</td>
+</tr>
+<tr>
+<td>start</td>
+<td>parse column CDT__<code>i</code> for each time chunk</td>
+</tr>
+<tr>
+<td>interpretation</td>
+<td><code>ELECTRICITY_CONSUMPTION_SUPPLIED</code> (<code>E_C_S</code>)</td>
+</tr>
+<tr>
+<td>value</td>
+<td>KWH__<code>i</code></td>
+</tr>
+<tr>
+<td>estimated</td>
+<td><code>False</code></td>
+</tr>
+<tr>
+<td>label</td>
+<td><code>SA_ID</code></td>
+</tr>
+<tr>
+<td>unit</td>
+<td><code>KWH</code></td>
+</tr>
+</tbody>
+</table>
+<p><em>Natural Gas</em></p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>project_id</td>
+<td>Column <code>SA_ID</code> corresponds to <code>Gas Service ID</code> in the projects file.</td>
+</tr>
+<tr>
+<td>start</td>
+<td>parse column CDT__<code>i</code> for each time chunk</td>
+</tr>
+<tr>
+<td>interpretation</td>
+<td><code>NATURAL_GAS_CONSUMPTION_SUPPLIED</code> (<code>NG_C_S</code>)</td>
+</tr>
+<tr>
+<td>value</td>
+<td>THN__<code>i</code></td>
+</tr>
+<tr>
+<td>estimated</td>
+<td><code>False</code></td>
+</tr>
+<tr>
+<td>label</td>
+<td>monthly-<code>SA_ID</code></td>
+</tr>
+<tr>
+<td>unit</td>
+<td><code>THM</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="weather">Weather</h3>
+<p>There are three weather source files necessary for the beta test.</p>
+<ol>
+<li><a href="http://www.CalTRACK.org/weather.html">CZ2010 weather normals for 86 stations in California</a></li>
+<li><a href="https://raw.githubusercontent.com/impactlab/CalTRACK-betatest/master/data-sources/weather/ZipCodetoCZ2010WeatherStationMap.csv">Mapping of zip codes to weather stations</a></li>
+<li><a href="http://www.ncdc.noaa.gov/cdo-web/">Hourly weather station data pulled from the NOAA ISD weather data using USAF</a></li>
+</ol>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../data-prep/" class="btn btn-neutral float-right" title="Data Preparation for Monthly Methods">Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href="../../guides/v1.1guide/" class="btn btn-neutral" title="Guide to Version 1.1 Daily Methods"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="http://www.mkdocs.org">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+	  
+        </div>
+      </div>
+
+    </section>
+    
+  </div>
+
+  <div class="rst-versions" role="note" style="cursor: pointer">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+      
+        <span><a href="../../guides/v1.1guide/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+      
+      
+        <span style="margin-left: 15px"><a href="../data-prep/" style="color: #fcfcfc">Next &raquo;</a></span>
+      
+    </span>
+</div>
+    <script src="../../js/theme.js"></script>
+      <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+</body>
+</html>

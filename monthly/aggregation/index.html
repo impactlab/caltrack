@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  
+  <link rel="shortcut icon" href="../../img/favicon.ico">
+  <title>Aggregration of Site-level Savings - CalTRACK Technical Documentation</title>
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="../../css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../css/theme_extra.css" type="text/css" />
+  <link rel="stylesheet" href="../../css/highlight.css">
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Aggregration of Site-level Savings";
+    var mkdocs_page_input_path = "monthly/aggregation.md";
+    var mkdocs_page_url = "/monthly/aggregation/";
+  </script>
+  
+  <script src="../../js/jquery-2.1.1.min.js"></script>
+  <script src="../../js/modernizr-2.8.3.min.js"></script>
+  <script type="text/javascript" src="../../js/highlight.pack.js"></script> 
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+      <div class="wy-side-nav-search">
+        <a href="../.." class="icon icon-home"> CalTRACK Technical Documentation</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+	<ul class="current">
+          
+            <li>
+    <li class="toctree-l1 ">
+        <a class="" href="../..">Home</a>
+        
+    </li>
+<li>
+          
+            <li>
+    <ul class="subnav">
+    <li><span>Getting Started Guides</span></li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../../guides/v1guide/">Guide to Version 1.0 Monthly Methods</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../../guides/v1.1guide/">Guide to Version 1.1 Daily Methods</a>
+        
+    </li>
+
+        
+    </ul>
+<li>
+          
+            <li>
+    <ul class="subnav">
+    <li><span>Monthly</span></li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../data-sources/">Data Sources for Monthly Methods</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../data-prep/">Data Preparation for Monthly Methods</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../analysis/">Analysis of Monthly Data</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 current">
+        <a class="current" href="./">Aggregration of Site-level Savings</a>
+        
+            <ul>
+            
+                <li class="toctree-l3"><a href="#technical-specification-for-aggregating-site-level-gross-savings-and-quantifying-uncertainty-in-aggregate-savings-statistics">Technical Specification for Aggregating Site-level Gross Savings and Quantifying Uncertainty in Aggregate Savings Statistics</a></li>
+                
+                    <li><a class="toctree-l4" href="#monthly-savings-estimate-aggregation-procedure">Monthly Savings Estimate Aggregation Procedure</a></li>
+                
+                    <li><a class="toctree-l4" href="#prepared-summary-statistics-for-aggregation-comparison">Prepared Summary Statistics for Aggregation Comparison</a></li>
+                
+            
+            </ul>
+        
+    </li>
+
+        
+    </ul>
+<li>
+          
+        </ul>
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../..">CalTRACK Technical Documentation</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../..">Docs</a> &raquo;</li>
+    
+      
+        
+          <li>Monthly &raquo;</li>
+        
+      
+    
+    <li>Aggregration of Site-level Savings</li>
+    <li class="wy-breadcrumbs-aside">
+      
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <h1 id="technical-specification-for-aggregating-site-level-gross-savings-and-quantifying-uncertainty-in-aggregate-savings-statistics">Technical Specification for Aggregating Site-level Gross Savings and Quantifying Uncertainty in Aggregate Savings Statistics</h1>
+<hr />
+<p>The goal of CalTRACK is to develop replicable, consistent, and methodologically defensible estimators of savings over <strong>portfolios of homes</strong>.</p>
+<p>Portfolio-level savings statistics are based on aggregations of site-level savings gross savings estimates created using the CalTRACK site-level monthly gross savings analysis methods.</p>
+<p>Because all site-level savings quantities generated using CalTRACK's technical specifications are based on time series predictions, portfolio-level savings statistics primarily use prediction errors to estimate of site-level uncertainty, and calculate portfolio-level averages using inverse variance weighted means to get a consistent estimator of mean portfolio-level savings.</p>
+<h2 id="monthly-savings-estimate-aggregation-procedure">Monthly Savings Estimate Aggregation Procedure</h2>
+<p>The main portfolio-level statistics of interest for CalTRACK are:</p>
+<ul>
+<li>Weighted mean annualized gross savings</li>
+<li>Variance annualized gross savings</li>
+<li>Annualized gross savings prediction intervals (+/- 95%)</li>
+<li>Unweighted total annualized gross savings</li>
+<li>Weighted mean cumulative gross savings</li>
+<li>Cumulative gross savings prediction intervals (+/-95%)</li>
+<li>Unweighted total cumulative gross savings</li>
+<li>Weighted mean year-one gross savings</li>
+<li>Year-one gross savings prediction intervals (+/-95%)</li>
+<li>Unweighted total year-one gross savings</li>
+<li>Weighted mean year-two gross savings</li>
+<li>Year-two gross savings prediction intervals (+/-95%)</li>
+<li>Unweighted total year-two gross savings</li>
+</ul>
+<h3 id="steps-for-calculating-aggregate-uncertainty-and-aggregate-means">Steps for calculating aggregate uncertainty and aggregate means.</h3>
+<p>While a detailed treatment of how to calculate each of these quantities is included below, the main formulations are below:</p>
+<ol>
+<li>Calculate the site-level Mean Squared Error (MSE) as an unbias estimator of the variance of the model errors, $s^2$ :</li>
+</ol>
+<p>
+<script type="math/tex; mode=display">s^2 = \sum{\frac{\hat{u}_i^2}{N−k}}</script>
+</p>
+<ol>
+<li>Calculate the site-level savings variance using in prediction error as an consistent estimator using the MSE, $s^2$, and variance in the out-of-sample data, $x_0$:</li>
+</ol>
+<p>
+<script type="math/tex; mode=display">\hat{V}_s = s^2*x_0*(X'X)^{−1} * x_0' + s^2</script>
+</p>
+<ol>
+<li>Calculate portfolio site-level inverse variance weighted mean savings using the savings variance and the following equation:</li>
+</ol>
+<p><img alt="Equation for inverse variance weighting" src="https://www.dropbox.com/s/353ssd5u7725a7c/Screenshot%202016-10-20%2010.49.07.png?raw=true" /></p>
+<h2 id="prepared-summary-statistics-for-aggregation-comparison">Prepared Summary Statistics for Aggregation Comparison</h2>
+<p>To ensure that the CalTRACK analysis specification can produce consistent results, each beta tester will generate a set of aggregate statistics on each of the above site-level savings estimates that can be shared with the larger group through csvs saved to this repository.</p>
+<p>There will be one savings summary file generated by each Beta Tester. Each file will be a .csv and will have the following general format:</p>
+<table>
+<thead>
+<tr>
+<th>Summary Stat</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Number of sites included in aggregation</td>
+<td>4321</td>
+</tr>
+<tr>
+<td>IVW mean annualized gross savings</td>
+<td>123</td>
+</tr>
+<tr>
+<td>Porfolio forecast variance</td>
+<td>4156</td>
+</tr>
+</tbody>
+</table>
+<h3 id="combined-project-data-summary-file">Combined Project Data Summary File</h3>
+<p><strong>Output Filename: <code>monthly_billing_analysis_savings_portfolio_aggregation_NAME_OF_TESTER.csv</code></strong></p>
+<h4 id="included-summary-statistics-for-portfolios-of-sites">Included Summary statistics for Portfolios of Sites</h4>
+<ul>
+<li>Weighted mean annualized gross savings</li>
+<li>Variance annualized gross savings</li>
+<li>Annualized gross savings prediction intervals (+/- 95%)</li>
+<li>Unweighted total annualized gross savings</li>
+<li>Weighted mean cumulative gross savings</li>
+<li>Cumulative gross savings prediction intervals (+/-95%)</li>
+<li>Unweighted total cumulative gross savings</li>
+<li>Weighted mean year-one gross savings</li>
+<li>Year-one gross savings prediction intervals (+/-95%)</li>
+<li>Unweighted total year-one gross savings</li>
+<li>Weighted mean year-two gross savings</li>
+<li>Year-two gross savings prediction intervals (+/-95%)</li>
+<li>Unweighted total year-two gross savings</li>
+</ul>
+<h4 id="calculating-site-level-prediction-intervals">Calculating site-level prediction intervals</h4>
+<p>For simplicity, and keeping with convention in the industry, site-level variance estimates based on ordinary least squares regressions will use OLS prediction error as the estimator for savings variance. Prediction error is calculated as follows:</p>
+<p>Take the stage one regression model with N observations and k regressors:</p>
+<p>
+<script type="math/tex; mode=display">y = X\beta + u</script>
+</p>
+<p>Given a vector (or matrix) $x_0$ of post-intervention (reporting) period degree day covariates, the predicted value for  observation would be</p>
+<p>
+<script type="math/tex; mode=display">E[y|x_0] = \hat{y}_0 = x_0\beta</script>
+</p>
+<p>A consistent estimator of the variance of this prediction is</p>
+<p>
+<script type="math/tex; mode=display">\hat{V}_p = s^2*x_0*(X'X)^{−1} * x_0</script>
+</p>
+<p>where</p>
+<p>
+<script type="math/tex; mode=display">s^2 = \sum{\frac{\hat{u}_i^2}{(N-k)}}</script>
+</p>
+<p>and <script type="math/tex">X</script> is the matrix of stage one covariates.</p>
+<p>The forecast error for a particular $y_0$ is</p>
+<p>
+<script type="math/tex; mode=display">\hat{e} = y_0 − \hat{y}_0= x_0\beta + u_0 − \hat{y}_0</script>
+</p>
+<p>The zero covariance between $u_0$ and $\hat{β}$ implies that</p>
+<p>
+<script type="math/tex; mode=display">Var[\hat{e}] = Var[\hat{y}_0] + Var[u_0]</script>
+</p>
+<p>and a consistent estimator of that is</p>
+<p>
+<script type="math/tex; mode=display">\hat{V}_s=s^2*x_0*(X'X)^{−1} * x_0' + s^2</script>
+</p>
+<p>The <script type="math/tex">1−\alpha</script> site-level confidence interval will be:</p>
+<p>
+<script type="math/tex; mode=display">y_0 ± t_(1−\alpha/2) * (\hat{V}_p)^.5</script>
+</p>
+<p>The <script type="math/tex">1−α</script> confidence interval on the savings will be wider, based on the estimated savings variance:</p>
+<p>
+<script type="math/tex; mode=display">y_0 ± t_(1−\alpha/2) * (\hat{V}_s)^.5</script>
+</p>
+<h4 id="calculating-inverse-variance-weighted-portfolio-savings-means-for-monthly-savings-analysis">Calculating Inverse-variance Weighted Portfolio Savings Means for Monthly Savings Analysis</h4>
+<p>Using site-level forecast variance as the consistent estimator of site-level gross savings estimation, CalTRACK will calculate the inverse-variance weighted mean for each portfolio according to the following equation:</p>
+<p>
+<script type="math/tex; mode=display">\hat{y} = \frac{\sum_i{y_i/ \sigma_i^2}}{\sum_i{1/ \sigma^2_i}}</script>
+</p>
+<h4 id="calculating-uncertainty-for-daily-and-hourly-methods">Calculating uncertainty for daily and hourly methods</h4>
+<p>While sampling methods would actually be preferable for characterizing the posterior distribution of savings estimates using higher-frequency AMI data, due to lack of adoption of Bayesian methods in industry and increased computational complexity, we propose CalTRACK use more frequently adopted.</p>
+<p>The two primary considerations for higher-frequency savings models are the need to take into account stronger autocorrelation and increased model specification error.</p>
+<p>M &amp; V standards for industrial savings estimation, which has been dealing with AMI data longer, provides useful guidance for dealing with these two considerations. Following ASHRAE Guideline 14-2002, and augmenting work done by the NW SEM Collaborative, we propose the following method:</p>
+<h5 id="fractional-savings-uncertainty-calculation">Fractional Savings uncertainty calculation</h5>
+<p>Because variances are larger in larger homes, normalizing levels of uncertainty using fractional savings uncertainty is an important aggregate metric, both for model comparison and selection, as well as final output. CalTRACK will compute the Fractional Savings Uncertainty at the site level based on the following equation:</p>
+<p><img alt="Equation" src="https://www.dropbox.com/s/lca8colvkqgrtyd/Screenshot%202016-10-20%2010.28.22.png?raw=true" /></p>
+<p>Where</p>
+<p>$CV$ is the coefficient of variance on the savings mean using prediction errors specified above
+$t$ is the relevant t-statistic for the desired level of confidence
+$F$ is the relevant F-statistic given degrees of freedom for the selected model</p>
+<h5 id="calculating-95-confidence-intervals-using-fractional-savings-uncertainty">Calculating 95% confidence intervals using fractional savings uncertainty</h5>
+<p>To calculate confidence intervals using the following equation:</p>
+<p>
+<script type="math/tex; mode=display">CI(95) = +/- (FSU * 1.96) * 100</script>
+</p>
+<h4 id="note-on-the-lack-of-comparison-group-adjustments-in-caltrack-technical-specification">Note on the lack of comparison group adjustments in CalTRACK technical specification</h4>
+<p>While the technical working group acknowledged the potential use of comparison groups in gross savings estimation to correct for population-wide exogenous effects on use, after extensive debate, it was decided that the CalTRACK use cases (pay-for-performance in particular) required the ability for non-utility actors to be able to estimate savings without access to comparison group data. While several promising ideas were developed through the technical working group process about how to address this issue (utilities publishing public adjustment factors based on pre-tabilated comparison groups for example), there were serious concern about feasbility in time for early 2017 roll out of the P4P pilot. As a result, the issue of transparent and replicable comparison group adjustments as part of CalTRACK methods was left for the next version of CalTRACK technical specifications.</p>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="../analysis/" class="btn btn-neutral" title="Analysis of Monthly Data"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="http://www.mkdocs.org">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+	  
+        </div>
+      </div>
+
+    </section>
+    
+  </div>
+
+  <div class="rst-versions" role="note" style="cursor: pointer">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+      
+        <span><a href="../analysis/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+      
+      
+    </span>
+</div>
+    <script src="../../js/theme.js"></script>
+      <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+</body>
+</html>
