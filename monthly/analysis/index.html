@@ -164,13 +164,14 @@
 <hr />
 <h3 id="methodological-overview">Methodological Overview</h3>
 <p>Site-level gross savings using monthly billing data (both electricity and gas) will use a two-stage estimation approach that closely follows methodological recommendations in the technical appendices of the Uniform Methods Project for Whole Home Building Analysis and the California Evaluation Project, with some modifications and more specific guidance developed through empirical testing to ensure consistency and replicability of results.</p>
-<p>The two-stage approach first fits <strong>two</strong> separate parametric models to daily average energy use, on the pre-intervention (baseline) period and one in the post-intervention (reporting) period for a single site using an ordinary least squares regression of the form:</p>
+<p>The idea behind two-stage site-level models is to model the energy use of each house before and after</p>
+<p>More formally, the two-stage approach first fits <strong>two</strong> separate parametric models to daily average energy use, one on the pre-intervention (baseline) period and one on the post-intervention (reporting) period for a single site using an ordinary least squares regression of the general form:</p>
 <p>
 <script type="math/tex; mode=display">UPD_{mi} = \mu_i + \beta_{Hi}H_m + \beta_{Ci}C_m +  \epsilon_{mi} </script>
 </p>
 <p>Where</p>
 <p>
-<script type="math/tex">UPD_{mi}</script> is average use (gas in therms, electricity in kWh) per day in month <script type="math/tex">m</script> for site <script type="math/tex">i</script>.</p>
+<script type="math/tex">UPD_{mi}</script> is average use (gas in therms, electricity in kWh) per day during billing period <script type="math/tex">m</script> for site <script type="math/tex">i</script>.</p>
 <p>
 <script type="math/tex">\mu_i</script> is the mean use for site <code>i</code>, or intercept.</p>
 <p>
@@ -178,7 +179,7 @@
 <p>
 <script type="math/tex">\beta_{Ci}</script> is the coefficient or site <code>i</code> on average cooling degree days per day.</p>
 <p>
-<script type="math/tex">H_m</script> is the average number of heating degree days per day in month <code>m</code>, which is a function of a fixed base temperature, the average daily temperatures from the weather station matched to site <code>i</code> during month <code>m</code>, and the number of days in month <code>m</code> with matched usage and weather data for site <code>i</code>.</p>
+<script type="math/tex">H_m</script> is the average number of heating degree days per day in billing period <code>m</code>, which is a function of a fixed base temperature, the average daily temperatures from the weather station matched to site <code>i</code> during the billing period <code>m</code>, and the number of days in billing period <code>m</code> with matched usage and weather data for site <code>i</code>.</p>
 <p>
 <script type="math/tex">C_m</script> is the average number of cooling degree days per day in month <code>m</code>, which is a function of a selected base temperature, the average daily temperatures from the weather station matched to site <code>i</code> during month <code>m</code>, and the number of days in month <code>m</code> with matched usage and weather data for site <code>i</code>.</p>
 <p>
@@ -202,12 +203,12 @@
 <script type="math/tex">n_{U_d}</script> is the total number of daily use values provided in the usage series that are between the first calendar day of month <code>m</code> and the last calendar day of month <code>m</code></p>
 <p><em>Note: If daily use data for gas or electric is not available, monthly billing data can be used for the monthly billing analysis. However, modifications of the denominators for average use per day and for average HDD and CDD per day are necessary.</em></p>
 <p>Now split the series of <script type="math/tex">UPD_m</script> values into pre- and post-intervention periods according to the following rules:</p>
-<p><em>Pre-intervention period</em>: all full month (15 days of recorded use or more) $UPD_m$ values from the beginning of the series up to the the complete calendar month prior to the <code>work_start_date</code>. The month containing <code>work_start_date</code> is excluded from this series.</p>
-<p><em>Post-intervention period</em>: all full month (15 days of recorded use or more) values from the first complete calendar month after the <code>work_end_date</code> to the end of the series.</p>
+<p><em>Pre-intervention period</em>: all <script type="math/tex">UPD_m</script> values from the beginning of the series up to the the complete billing month prior to the <code>work_start_date</code>. The month containing <code>work_start_date</code> is excluded from this series.</p>
+<p><em>Post-intervention period</em>: all <script type="math/tex">UPD_m</script> values from the first billing month after the <code>work_end_date</code> to the end of the series.</p>
 <p><strong>Final data sufficiency qualification check</strong>: All qualifying sites must have at least 12 months of contiguous $UPD_m$ values in the pre-intervention series and at least 12 months of contiguous post-intervention <script type="math/tex">UPD_m</script> values starting with the month after <code>work_end_date</code>.</p>
 <p><strong>All sites not meeting these minimum data requirements are thrown out of the analysis</strong></p>
 <h4 id="2-set-fixed-degree-day-base-temperature-and-calculated-hdd-and-cdd">2. Set fixed degree day base temperature and calculated HDD and CDD</h4>
-<p>Next you calculate total HDD and CDD for the each calendar month in the series. CalTRACK will use a fixed degree day base for monthly billing analysis. The following balance point temperatures will be use:</p>
+<p>Next you calculate total HDD and CDD for the each billing period in the series. CalTRACK will use a fixed degree day base for monthly billing analysis. The following balance point temperatures will be use:</p>
 <p>HDD base temp: 60 F</p>
 <p>CDD base temp: 70 F</p>
 <p>HDD and CDD values are calculated as follows</p>
@@ -216,11 +217,11 @@
 </p>
 <p>Where</p>
 <p>
-<script type="math/tex">HDD_m</script> = Average heating degree days per day for calendar month <code>m</code></p>
+<script type="math/tex">HDD_m</script> = Average heating degree days per day for billing period <code>m</code></p>
 <p>
 <script type="math/tex">n_{U_d}</script> = the number of days with both weather and usage data</p>
 <p>
-<script type="math/tex">\sum</script> = the sum of the degree  over each day <code>d</code> in calendar month <code>m</code></p>
+<script type="math/tex">\sum</script> = the sum of the degree  over each day <code>d</code> in billing period <code>m</code></p>
 <p>
 <script type="math/tex">\max</script> = the maximum of the two values in ()</p>
 <p>
@@ -231,11 +232,11 @@
 </p>
 <p>Where</p>
 <p>
-<script type="math/tex">CDD_m</script> = Cooling degree days for calendar month <code>m</code></p>
+<script type="math/tex">CDD_m</script> = Cooling degree days for billing period <code>m</code></p>
 <p>
 <script type="math/tex">n_{U_d}</script> = the number of days with both weather and usage data</p>
 <p>
-<script type="math/tex">\sum</script> = the sum of values in {} over each day <code>d</code> in calendar month <code>m</code></p>
+<script type="math/tex">\sum</script> = the sum of values in {} over each day <code>d</code> in billing period <code>m</code></p>
 <p>
 <script type="math/tex">\max</script> = the maximum of the two values in ()</p>
 <p>
@@ -311,26 +312,26 @@ Year two annualized gross savings in the normal year</p>
 <p>These site-level second stage quantities are calculated as follows:</p>
 <h4 id="cumulative-gross-savings-over-entire-performance-period-site-level">Cumulative gross savings over entire performance period (site-level)</h4>
 <ol>
-<li>Compute <code>predicted_baseline_use</code> for each complete calendar month after <code>work_end_date</code> using parameter estimates from the stage one model from the pre-intervention (baseline) period model and the associated average degree days for each month in the post-intervention (reporting) period, ensuring that the same degree day values calculated for stage one model fits are use in stage two estimation.</li>
-<li>Compute <code>monthly_gross_savings</code> = <code>predicted_baseline_monthly_use - actual_monthly_use</code> for every complete calendar months after <code>work_end_date</code> for project</li>
-<li>Sum  <code>monthly_gross_savings</code> over every complete calendar month since <code>work_end_date</code>.</li>
+<li>Compute <code>predicted_baseline_use</code> for each complete billing period after <code>work_end_date</code> using parameter estimates from the stage one model from the pre-intervention (baseline) period model and the associated average degree days for each month in the post-intervention (reporting) period, ensuring that the same degree day values calculated for stage one model fits are use in stage two estimation.</li>
+<li>Compute <code>monthly_gross_savings</code> = <code>predicted_baseline_monthly_use - actual_monthly_use</code> for every complete billing periods after <code>work_end_date</code> for project</li>
+<li>Sum  <code>monthly_gross_savings</code> over every complete billing period since <code>work_end_date</code>.</li>
 </ol>
 <h4 id="year-one-gross-savings-from-1-to-12-months-after-site-visit-site-level">Year one gross savings from 1 to 12 months after site visit. (site-level)</h4>
 <ol>
-<li>Compute <code>predicted_baseline_use</code> for each complete calendar month after <code>work_end_date</code> until 12 calendar months after <code>work_end_date</code>  using parameter estimates from the stage one model from the pre-intervention (baseline) period model and the associated average degree days for each month in the post-intervention (reporting) period, ensuring that the same degree day values calculated for stage one model fits are use in stage two estimation.</li>
-<li>Compute <code>monthly_gross_savings</code> = <code>predicted_baseline_monthly_use - actual_monthly_use</code> for 12 complete calendar months after <code>work_end_date</code> for project</li>
-<li>Sum  <code>monthly_gross_savings</code> over the 12 calendar months since <code>work_end_date</code>.</li>
+<li>Compute <code>predicted_baseline_use</code> for each complete billing period after <code>work_end_date</code> until 12 billing periods after <code>work_end_date</code>  using parameter estimates from the stage one model from the pre-intervention (baseline) period model and the associated average degree days for each month in the post-intervention (reporting) period, ensuring that the same degree day values calculated for stage one model fits are use in stage two estimation.</li>
+<li>Compute <code>monthly_gross_savings</code> = <code>predicted_baseline_monthly_use - actual_monthly_use</code> for 12 complete billing periods after <code>work_end_date</code> for project</li>
+<li>Sum  <code>monthly_gross_savings</code> over the 12 billing periods since <code>work_end_date</code>.</li>
 </ol>
 <h4 id="year-two-gross-savings-from-13-to-24-months-after-site-visit-site-level">Year two gross savings from 13 to 24 months after site visit. (site-level)</h4>
 <ol>
-<li>Compute <code>predicted_baseline_use</code> for each complete calendar month starting 13 months after <code>work_end_date</code> until 24 calendar months after <code>work_end_date</code>  using parameter estimates from the stage one model from the pre-intervention (baseline) period model and the associated average degree days for each month in the post-intervention (reporting) period, ensuring that the same degree day values calculated for stage one model fits are use in stage two estimation.</li>
+<li>Compute <code>predicted_baseline_use</code> for each complete billing period starting 13 months after <code>work_end_date</code> until 24 billing periods after <code>work_end_date</code>  using parameter estimates from the stage one model from the pre-intervention (baseline) period model and the associated average degree days for each month in the post-intervention (reporting) period, ensuring that the same degree day values calculated for stage one model fits are use in stage two estimation.</li>
 <li>Compute <code>monthly_gross_savings</code> = <code>predicted_baseline_monthly_use - actual_monthly_use</code> for month 13 to month 24 after <code>work_end_date</code> for project</li>
-<li>Sum  <code>monthly_gross_savings</code> over the 12 calendar months from 13 months after <code>work_end_date</code> to 24 months.</li>
+<li>Sum  <code>monthly_gross_savings</code> over the 12 billing periods from 13 months after <code>work_end_date</code> to 24 months.</li>
 </ol>
 <h4 id="year-one-site-level-annualized-gross-savings-in-the-normal-year">Year one site-level annualized gross savings in the normal year</h4>
 <ol>
-<li>Compute <code>predicted_baseline_monthly_use</code> using the stage one model from the baseline period and average degree days from the CZ2010 normal weather year. Use the full month of available values when calculating the average degree days per calendar month for the normal year.</li>
-<li>Compute <code>predicted_reporting_monthly_use</code> using a <code>stage one</code> model fit to only the first 12 months of post-intervention values and degree days from the CZ2010 normal weather year file. Use the full month of available values when calculating the average degree days per calendar month for the normal year.</li>
+<li>Compute <code>predicted_baseline_monthly_use</code> using the stage one model from the baseline period and average degree days from the CZ2010 normal weather year. Use the full month of available values when calculating the average degree days per billing period for the normal year.</li>
+<li>Compute <code>predicted_reporting_monthly_use</code> using a <code>stage one</code> model fit to only the first 12 months of post-intervention values and degree days from the CZ2010 normal weather year file. Use the full month of available values when calculating the average degree days per billing period for the normal year.</li>
 <li>Compute <code>monthly_normal_year_gross_savings</code> = <code>predicted_baseline_monthly_use - predicted_reporting_monthly_use</code> for normal year months</li>
 <li>Sum  <code>monthly_normal_year_gross_savings</code> over entire normal year.</li>
 </ol>
@@ -344,140 +345,6 @@ Year two annualized gross savings in the normal year</p>
 <h3 id="post-estimation-steps-and-portfolio-aggregation">Post-estimation steps and portfolio aggregation</h3>
 <p>The goal of CalTRACK is to develop replicable, consistent, and methodologically defensible estimators of savings over <strong>portfolios of homes</strong>. In order to do that, the above site-level savings quantities must be aggregated to get portfolio-level totals, means, and variances. Taking the site-level estimates, CalTRACK then performs a set of aggregation steps that are specified <a href="https://github.com/impactlab/CalTRACK-betatest/tree/master/aggregation">here</a>.</p>
 <hr />
-<h4 id="monthly-savings-estimation-summary-statistics-for-analysis-comparison">Monthly Savings Estimation Summary Statistics for Analysis Comparison</h4>
-<p>To ensure that the CalTRACK analysis specification can produce consistent results, each beta tester will generate a set of summary statistics on each of the above site-level savings estimates that can be shared with the larger group through csvs saved to this repository. There will be one savings summary file generated by each Beta Tester. Each file will be a .csv and will have the following general format:</p>
-<table>
-<thead>
-<tr>
-<th>Summary Stat</th>
-<th>Value</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Number of Sites Included in Analysis</td>
-<td>4321</td>
-</tr>
-<tr>
-<td>Number of sites that met model fitness criteria</td>
-<td>3800</td>
-</tr>
-<tr>
-<td>Min cumulative gross savings</td>
-<td>123</td>
-</tr>
-<tr>
-<td>Max cumulative gross savings</td>
-<td>456</td>
-</tr>
-</tbody>
-</table>
-<p><strong>Combined Project Data Summary File</strong>
-Output Filename: <code>monthly_billing_analysis_savings_summary_NAME_OF_TESTER.csv</code></p>
-<h4 id="included-summary-statistics">Included Summary statistics</h4>
-<ul>
-<li>Total number of sites included in first-stage estimation</li>
-<li>Total number of sites with cumulative gross savings estimates</li>
-<li>Total number of sites with normal year annualized gross savings</li>
-<li>Total number of sites with year one annualized gross savings</li>
-<li>Total number of sites with year two annualized gross savings</li>
-<li>Min cumulative gross savings</li>
-<li>Max cumulative gross savings</li>
-<li>Average cumulative gross savings</li>
-<li>10th percentile value cumulative gross savings</li>
-<li>20th percentile value cumulative gross savings</li>
-<li>30th percentile value cumulative gross savings</li>
-<li>40th percentile value cumulative gross savings</li>
-<li>50th percentile value cumulative gross savings</li>
-<li>60th percentile value cumulative gross savings</li>
-<li>70th percentile value cumulative gross savings</li>
-<li>80th percentile value cumulative gross savings</li>
-<li>90th percentile value cumulative gross savings</li>
-<li>Cumulative gross savings average MSE</li>
-<li>Cumulative gross savings average prediction error</li>
-<li>Min normal year annualized savings</li>
-<li>Max normal year annualized savings</li>
-<li>Average normal year annualized savings</li>
-<li>10th percentile value normal year annualized savings</li>
-<li>20th percentile value normal year annualized savings</li>
-<li>30th percentile value normal year annualized savings</li>
-<li>40th percentile value normal year annualized savings</li>
-<li>50th percentile value normal year annualized savings</li>
-<li>60th percentile value normal year annualized savings</li>
-<li>70th percentile value normal year annualized savings</li>
-<li>80th percentile value normal year annualized savings</li>
-<li>90th percentile value normal year annualized savings</li>
-<li>Normal year annualized savings average MSE</li>
-<li>Normal year annualized savings average prediction error</li>
-<li>Min year one annualized gross savings</li>
-<li>Max year one annualized gross savings</li>
-<li>Average year one annualized gross savings</li>
-<li>10th percentile value year one annualized gross savings</li>
-<li>20th percentile value year one annualized gross savings</li>
-<li>30th percentile value year one annualized gross savings</li>
-<li>40th percentile value year one annualized gross savings</li>
-<li>50th percentile value year one annualized gross savings</li>
-<li>60th percentile value year one annualized gross savings</li>
-<li>70th percentile value year one annualized gross savings</li>
-<li>80th percentile value year one annualized gross savings</li>
-<li>90th percentile value year one annualized gross savings</li>
-<li>Year one annualized gross savings average MSE</li>
-<li>Year one annualized gross savings average prediction error</li>
-<li>Min year two annualized gross savings</li>
-<li>Max year two annualized gross savings</li>
-<li>Average year two annualized gross savings</li>
-<li>10th percentile value year two annualized gross savings</li>
-<li>20th percentile value year two annualized gross savings</li>
-<li>30th percentile value year two annualized gross savings</li>
-<li>40th percentile value year two annualized gross savings</li>
-<li>50th percentile value year two annualized gross savings</li>
-<li>60th percentile value year two annualized gross savings</li>
-<li>70th percentile value year two annualized gross savings</li>
-<li>80th percentile value year two annualized gross savings</li>
-<li>90th percentile value year two annualized gross savings</li>
-<li>Year two annualized gross savings average MSE</li>
-<li>Year two annualized gross savings average prediction error</li>
-<li>Min heating balance point temp baseline period</li>
-<li>Max heating balance point temp baseline period</li>
-<li>Average heating balance point temp baseline period</li>
-<li>10th percentile value heating balance point temp baseline period</li>
-<li>20th percentile value heating balance point temp baseline period</li>
-<li>30th percentile value heating balance point temp baseline period</li>
-<li>40th percentile value heating balance point temp baseline period</li>
-<li>50th percentile value heating balance point temp baseline period</li>
-<li>60th percentile value heating balance point temp baseline period</li>
-<li>70th percentile value heating balance point temp baseline period</li>
-<li>80th percentile value heating balance point temp baseline period</li>
-<li>90th percentile value heating balance point temp baseline period</li>
-<li>Min cooling balance point temp baseline period</li>
-<li>Max cooling balance point temp baseline period</li>
-<li>Average cooling balance point temp baseline period</li>
-<li>10th percentile value cooling balance point temp baseline period</li>
-<li>20th percentile value cooling balance point temp baseline period</li>
-<li>30th percentile value cooling balance point temp baseline period</li>
-<li>40th percentile value cooling balance point temp baseline period</li>
-<li>50th percentile value cooling balance point temp baseline period</li>
-<li>60th percentile value cooling balance point temp baseline period</li>
-<li>70th percentile value cooling balance point temp baseline period</li>
-<li>80th percentile value cooling balance point temp baseline period</li>
-<li>90th percentile value cooling balance point temp baseline period</li>
-<li>Count of Heating + Cooling models baseline period</li>
-<li>Count of Heating only models baseline period</li>
-<li>Count of Cooling only models baseline period</li>
-<li>Mean Heating coefficient value across all baseline period models</li>
-<li>Min Heating coefficient value across all baseline period models</li>
-<li>Max Heating coefficient value across all baseline period models</li>
-<li>Mean Cooling coefficient value across all baseline period models</li>
-<li>Min Cooling coefficient value across all baseline period models</li>
-<li>Max Cooling coefficient value across all baseline period models</li>
-<li>Count of sites where model selection changes between baseline and reporting (from <code>N</code> parameters to <code>M</code> parameters where <code>N != M</code>)</li>
-<li>Min cooling balance point temp reporting period</li>
-<li>Max cooling balance point temp reporting period</li>
-<li>Average cooling balance point temp reporting period</li>
-<li>Min heating balance point temp reporting period</li>
-<li>Max heating balance point temp reporting period</li>
-<li>Average heating balance point temp reporting period</li>
-</ul>
               
             </div>
           </div>
