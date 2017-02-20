@@ -196,7 +196,7 @@
 <li>Final combined data sufficiency checks</li>
 </ol>
 <h3 id="1-project-data-preparation">1. Project Data Preparation</h3>
-<p>The minimum field requirements for project data under the CalTRACK monthly specification are outlined here. Notably, a prepared project file should consist of one row per project, with a unique ID that can be used to link to gas and/or electric usage data, project start and stop dates, and zip code for the site. The following data cleaning steps for project data are meant to ensure that the prepared project file meets these field requirements and uniqueness constraints.</p>
+<p>The minimum field requirements for project data under the CalTRACK monthly specification are outlined [here] (https://github.com/impactlab/caltrack/blob/master/docs/monthly/data-sources.md). Notably, a prepared project file should consist of one row per project, with a unique ID that can be used to link to gas and/or electric usage data, project start and stop dates, and zip code for the site. The following data cleaning steps for project data are meant to ensure that the prepared project file meets these field requirements and uniqueness constraints.</p>
 <h4 id="creating-work-start-and-work-end-dates-from-raw-project-data">Creating Work Start and Work End dates from raw project data</h4>
 <p>Accurately identifying baseline and reporting periods is important for reducing the modeling error associated with a savings calculation. However, considerable variation may occur in database records identifying dates associated with project start and project completion.
 In general, users should try to identify the fields in a project record that most closely match the actual work start and work completion dates. In the absence of either of these fields (that is, if a project record only contains one or the other set of dates), It is recommended that users identify an average time to completion.
@@ -208,7 +208,9 @@ Implausible month and year values should be flagged and that home not included i
 <p>If a building appears multiple times within a project database, and the project dates are the same the most complete record for that building should be used
 If a building appears multiple times within a project database and the project dates differ because there are multiple measures installed associated with the same incentive program, the start date of the intervention should be the earliest of the project start dates across projects and the end date for the intervention should be the latest of the project end dates.</p>
 <h3 id="2-weather-data-preparation">2. Weather Data Preparation</h3>
-<p>For CalTRACK monthly billing analysis, the weather data requirements are detailed here. For monthly analysis, since the daily average temperature data from a nearby weather station is used to create values for the number of heating degree days (below 60F) and cooling degree days (above 70F) in each billing period, the primary consideration in preparing the data is how to deal with missing values.</p>
+<p>For CalTRACK monthly billing analysis, the weather data requirements are straightforward. For monthly analysis, since the daily average temperature data from a nearby weather station is used to create values for the number of heating degree days (below 60F) and cooling degree days (above 70F) in each billing period, the primary consideration in preparing the data is how to deal with missing values.
+Additional weather data can be found [here] (https://github.com/impactlab/caltrack/blob/master/docs/monthly/data-sources.md#weather)
+For further discussions regarding weather data, see issues #10, #16. </p>
 <h4 id="dealing-with-missing-values">Dealing with missing values</h4>
 <p>Weather data is notoriously incomplete, especially at the granular sub-daily level. Some weather stations generally fail to report data, other weather stations are simply inconsistent in reporting data. This becomes an issue when trying to match projects to their local weather conditions. If a nearby non-reporting weather station is selected, the savings model will fail. If the project is connected to a nearby intermittently reporting weather station, the model will suffer. Additionally, if a project is connected to a weather station that experiences a significantly different local micro-climate, the model will suffer.
 * It is recommended that for monthly billing analysis daily average temperature values that are missing not be imputed, but rather count against a site in meeting data sufficiency requirements (detailed at the end of the document).</p>
@@ -235,7 +237,7 @@ If a building appears multiple times within a project database and the project d
 <h4 id="drop-records-not-meeting-data-sufficiency-requirements">Drop records not meeting data sufficiency requirements</h4>
 <p>Calculating energy efficiency savings requires a sufficient observation period of energy usage prior to and after an intervention. Generally, annualized models require at least 12 months of usage data on each side of an intervention in order to accurately calculate energy savings. Some models may be able to calculate energy savings with fewer than 12 months of data in the reporting period.
 <em> 12 complete months pre-retrofit for monthly billing data to qualify for estimation or 24 months with up to 2 missing values from different, non-contiguous months
-</em> Post retrofit data sufficiency for estimation will be dealt with in post-estimation model fit criterion
+</em> Post retrofit data sufficiency for estimation will be dealt with in [post-estimation model fit criterion] (https://github.com/impactlab/caltrack/blob/master/docs/monthly/analysis.md#3-fit-all-candidate-models-and-apply-qualification-criteria)
 * Total annual savings estimates will require 12 months post-retrofit</p>
 <h4 id="drop-project-records-with-unsupported-characteristics">Drop project records with unsupported characteristics</h4>
 <ul>
@@ -245,7 +247,7 @@ If a building appears multiple times within a project database and the project d
 <h3 id="6-link-weather-data-and-project-records">6. Link weather data and project records</h3>
 <p>Weather station mapping requires locating the station nearest to the project. Each project file should contain a zip code that allows matching weather stations to projects</p>
 <ul>
-<li>For California, weather station mapping was done using the 86 station standard mapping of zip code to CZ2010 weather files. Clean versions of these files can be found [here}(http://www.caltrack.org/weather.html).</li>
+<li>For California, weather station mapping was done using the 86 station standard mapping of zip code to CZ2010 weather files. Clean versions of these files can be found <a href="https://github.com/impactlab/caltrack/blob/master/tests/data-sources/weather/stationmapping_v2.csv">here</a>.</li>
 </ul>
 <h3 id="7-final-combined-data-sufficiency-checks">7. Final combined data sufficiency checks</h3>
 <ul>

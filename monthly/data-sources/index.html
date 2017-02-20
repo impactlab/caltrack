@@ -88,7 +88,7 @@
             
                 <li class="toctree-l3"><a href="#data-sources">Data Sources</a></li>
                 
-                    <li><a class="toctree-l4" href="#output-data-format">Output data format</a></li>
+                    <li><a class="toctree-l4" href="#weather">Weather</a></li>
                 
             
             </ul>
@@ -222,6 +222,10 @@
 <td>Service Agreement ID - generated when a customer signs a service agreement. Can be many SAs for a single SPID. Corresponds to <code>Electric Service ID</code> in project files.</td>
 </tr>
 <tr>
+<td>prem_id</td>
+<td>Corresponds to <code>char_prem_id</code> in Cross Reference file</td>
+</tr>
+<tr>
 <td>UOM</td>
 <td>Unit of Measure (KWH or THERM)</td>
 </tr>
@@ -264,6 +268,10 @@
 <tr>
 <td>Service Point</td>
 <td>Service Point ID - identifies the physical meter. Corresponds to <code>sp_id</code> in cross-reference table.</td>
+</tr>
+<tr>
+<td>prem_id</td>
+<td>Corresponds to <code>char_prem_id</code> in Cross Reference file</td>
 </tr>
 <tr>
 <td>Measurement Date</td>
@@ -350,192 +358,9 @@
 <td>sp_id</td>
 <td>Corresponds to <code>SPID</code> in electricity consumption file and <code>Service Point</code> in natural gas file</td>
 </tr>
-</tbody>
-</table>
-<h2 id="output-data-format">Output data format</h2>
-<p>The cleaned data should be is as follows:</p>
-<p><strong>Projects</strong></p>
-<table>
-<thead>
 <tr>
-<th>Field</th>
-<th>Value</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>project_id</td>
-<td>Project file, column <code>Application No.</code></td>
-</tr>
-<tr>
-<td>zipcode</td>
-<td>Project file, column <code>Building ZIP Code</code></td>
-</tr>
-<tr>
-<td>baseline_period_end</td>
-<td>Column <code>Work Start Date</code> unless empty, then column <code>Initial Approval Date</code></td>
-</tr>
-<tr>
-<td>reporting_period_start</td>
-<td>Column <code>Work Finish Date</code> unless empty, then column <code>Initial Submission Date</code></td>
-</tr>
-</tbody>
-</table>
-<p><strong>Consumption</strong></p>
-<p><em>Electricity</em></p>
-<table>
-<thead>
-<tr>
-<th>Field</th>
-<th>Value</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>project_id</td>
-<td>Column <code>Application No.</code> in project file. Use the consumption cross-reference file to map the <code>SPID</code> column to <code>Electric Service ID</code> in the projects file. <strong>There may be more than one matching project row</strong> – TBD how to handle this [1]</td>
-</tr>
-<tr>
-<td>start</td>
-<td>column <code>DATE</code> + column header for each time chunk</td>
-</tr>
-<tr>
-<td>interpretation</td>
-<td><code>ELECTRICITY_CONSUMPTION_SUPPLIED</code> (<code>E_C_S</code>) for D direction. <code>ELECTRICITY_ON_SITE_GENERATION_UNCONSUMED</code> (<code>E_OSG_U</code>) for R direction</td>
-</tr>
-<tr>
-<td>value</td>
-<td>Value of cell.</td>
-</tr>
-<tr>
-<td>estimated</td>
-<td><code>False</code></td>
-</tr>
-<tr>
-<td>label</td>
-<td><code>SA</code> + "-" + <code>SPID</code> + "-" + <code>DIR</code></td>
-</tr>
-<tr>
-<td>unit</td>
-<td><code>KWH</code></td>
-</tr>
-</tbody>
-</table>
-<p><em>Natural Gas</em></p>
-<table>
-<thead>
-<tr>
-<th>Field</th>
-<th>Value</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>project_id</td>
-<td>Column <code>Application No.</code> in project file. Use the consumption cross-reference file to map the <code>Service Point</code> column to <code>Gas Service ID</code> in the projects file.</td>
-</tr>
-<tr>
-<td>start</td>
-<td>column <code>Measurement Date</code></td>
-</tr>
-<tr>
-<td>interpretation</td>
-<td><code>NATURAL_GAS_CONSUMPTION_SUPPLIED</code> (<code>NG_C_S</code>)</td>
-</tr>
-<tr>
-<td>value</td>
-<td>Column <code>Therms per Day</code></td>
-</tr>
-<tr>
-<td>estimated</td>
-<td><code>False</code></td>
-</tr>
-<tr>
-<td>label</td>
-<td><code>Service Point</code></td>
-</tr>
-<tr>
-<td>unit</td>
-<td><code>THM</code></td>
-</tr>
-</tbody>
-</table>
-<p><strong>Monthly Consumption</strong></p>
-<p><em>Electricity</em></p>
-<table>
-<thead>
-<tr>
-<th>Field</th>
-<th>Value</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>project_id</td>
-<td>Column <code>SA_ID</code> corresponds to <code>Electric Service ID</code> in the projects file.</td>
-</tr>
-<tr>
-<td>start</td>
-<td>parse column CDT__<code>i</code> for each time chunk</td>
-</tr>
-<tr>
-<td>interpretation</td>
-<td><code>ELECTRICITY_CONSUMPTION_SUPPLIED</code> (<code>E_C_S</code>)</td>
-</tr>
-<tr>
-<td>value</td>
-<td>KWH__<code>i</code></td>
-</tr>
-<tr>
-<td>estimated</td>
-<td><code>False</code></td>
-</tr>
-<tr>
-<td>label</td>
-<td><code>SA_ID</code></td>
-</tr>
-<tr>
-<td>unit</td>
-<td><code>KWH</code></td>
-</tr>
-</tbody>
-</table>
-<p><em>Natural Gas</em></p>
-<table>
-<thead>
-<tr>
-<th>Field</th>
-<th>Value</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>project_id</td>
-<td>Column <code>SA_ID</code> corresponds to <code>Gas Service ID</code> in the projects file.</td>
-</tr>
-<tr>
-<td>start</td>
-<td>parse column CDT__<code>i</code> for each time chunk</td>
-</tr>
-<tr>
-<td>interpretation</td>
-<td><code>NATURAL_GAS_CONSUMPTION_SUPPLIED</code> (<code>NG_C_S</code>)</td>
-</tr>
-<tr>
-<td>value</td>
-<td>THN__<code>i</code></td>
-</tr>
-<tr>
-<td>estimated</td>
-<td><code>False</code></td>
-</tr>
-<tr>
-<td>label</td>
-<td>monthly-<code>SA_ID</code></td>
-</tr>
-<tr>
-<td>unit</td>
-<td><code>THM</code></td>
+<td>char_prem_id</td>
+<td>Corresponds to <code>prem_id</code> in electricity and natural gas consumption files</td>
 </tr>
 </tbody>
 </table>
