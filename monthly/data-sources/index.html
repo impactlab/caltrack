@@ -86,7 +86,7 @@
         
             <ul>
             
-                <li class="toctree-l3"><a href="#data-sources-for-caltrack-beta-test">Data Sources for CalTRACK Beta Test</a></li>
+                <li class="toctree-l3"><a href="#data-sources">Data Sources</a></li>
                 
                     <li><a class="toctree-l4" href="#output-data-format">Output data format</a></li>
                 
@@ -156,38 +156,11 @@
           <div role="main">
             <div class="section">
               
-                <h1 id="data-sources-for-caltrack-beta-test">Data Sources for CalTRACK Beta Test</h1>
-<p>Two major types of data files are supplied for the CalTRACK Beta: project data and consumption data. This data is linked with "cross-reference" files that define the mapping between ID columns in the two types of files.</p>
-<p>There are two types of project files, which have slightly different column types--<code>AHU</code> and <code>AHUP</code>--requiring different logic for determining baseline and reporting period dates.</p>
+                <h1 id="data-sources">Data Sources</h1>
+<p>Two major types of data files required to run the CalTRACK Methods: project data and consumption data. This data is linked with "cross-reference" files that define the mapping between ID columns in the two types of files.</p>
 <p>Consumption data is further broken down into five file types: 15 minutely electricity, hourly electricity, daily natural gas, monthly electricity, and monthly natural gas.</p>
-<p>The beta test set uses the following files:</p>
-<ul>
-<li>
-<p>Project:</p>
-<p><code>CalTRACK (AHUP) from 1_1_14__6_30_15_v2_FINAL_090816.csv</code>
-<code>CalTRACK (AHU) from 1_1_14__6_30_15_v2_FINAL_090816.csv</code>
-<code>CalTRACK (AHU) from 7_1_15__6_30_16_v2_FINAL_090816.csv</code></p>
-</li>
-<li>
-<p>Consumption:</p>
-<ul>
-<li>15 minutely electricity: <code>IDA.15MIN.SMY1.EES25162-EHUP.20160719161716.csv</code></li>
-<li>Hourly electricity: <code>IDA.60MIN.SMY1.EES25162-EHUP.20160719161716</code></li>
-<li>Daily natural gas: <code>EES25162_gasdy_160720.csv</code></li>
-<li>Monthly electricity: <code>EES25162.ERESBL13.XPT...</code></li>
-<li>Monthly natural gas: <code>EES25162.GRESBL13.XPT...</code></li>
-</ul>
-</li>
-<li>
-<p>Cross-reference</p>
-<ul>
-<li>Electricity: <code>EES25162_ELECINTV_XREF.csv</code></li>
-<li>Natural Gas: <code>EES25162_GASINTV_XREF.csv</code></li>
-</ul>
-</li>
-</ul>
-<p>The columns of interest in these files are as follows:</p>
-<p><strong>Project AHUP</strong></p>
+<p>The columns of interest are as follows:</p>
+<p><strong>Project </strong></p>
 <table>
 <thead>
 <tr>
@@ -223,45 +196,6 @@
 <tr>
 <td>Work Finish Date</td>
 <td>Date retrofit ended, <em>always empty</em></td>
-</tr>
-<tr>
-<td>Building ZIP Code</td>
-<td></td>
-</tr>
-</tbody>
-</table>
-<p><strong>Project AHU</strong></p>
-<table>
-<thead>
-<tr>
-<th>Column Name</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Application No.</td>
-<td>Project identifier</td>
-</tr>
-<tr>
-<td>Electric Service ID</td>
-<td>ID used for matching with consumption files</td>
-</tr>
-<tr>
-<td>Gas Service ID</td>
-<td>ID used for matching with consumption files</td>
-</tr>
-<tr>
-<td>Initial Submission Date</td>
-<td>Date of submission of energy retrofit project paperwork (after work completed)</td>
-</tr>
-<tr>
-<td>Work Start Date</td>
-<td>Date retrofit started</td>
-</tr>
-<tr>
-<td>Work Finish Date</td>
-<td>Date retrofit ended</td>
 </tr>
 <tr>
 <td>Building ZIP Code</td>
@@ -369,10 +303,7 @@
 </tr>
 </tbody>
 </table>
-<p>All other columns are ignored.</p>
 <p>SAS formatted dates count the number of days since Jan 1, 1960.</p>
-<p>Details on rate schedules: https://www.pge.com/tariffs/ERS.SHTML
-(Currently unused but might impact <code>interpretation</code> in the future.)</p>
 <p><em>Natural Gas</em></p>
 <table>
 <thead>
@@ -424,7 +355,6 @@
 <h2 id="output-data-format">Output data format</h2>
 <p>The cleaned data should be is as follows:</p>
 <p><strong>Projects</strong></p>
-<p><em>AHU</em></p>
 <table>
 <thead>
 <tr>
@@ -448,33 +378,6 @@
 <tr>
 <td>reporting_period_start</td>
 <td>Column <code>Work Finish Date</code> unless empty, then column <code>Initial Submission Date</code></td>
-</tr>
-</tbody>
-</table>
-<p><em>AHUP</em></p>
-<table>
-<thead>
-<tr>
-<th>Field</th>
-<th>Value</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>project_id</td>
-<td>Project file, column <code>Application No.</code></td>
-</tr>
-<tr>
-<td>zipcode</td>
-<td>Project file, column <code>Building ZIP Code</code></td>
-</tr>
-<tr>
-<td>baseline_period_end</td>
-<td>Column <code>Notice to Proceed Issued</code> (Proxy for Work Start Date)</td>
-</tr>
-<tr>
-<td>reporting_period_start</td>
-<td>If <code>Full Application Returned</code> is empty, column <code>Full Application Submitted</code>, otherwise column <code>Full Application Started</code> (Proxy for Work Finish Date)</td>
 </tr>
 </tbody>
 </table>
@@ -518,7 +421,6 @@
 </tr>
 </tbody>
 </table>
-<p>[1] Only a single consumption trace matches multiple projects in the beta test data set.</p>
 <p><em>Natural Gas</em></p>
 <table>
 <thead>
@@ -638,7 +540,7 @@
 </tbody>
 </table>
 <h3 id="weather">Weather</h3>
-<p>There are three weather source files necessary for the beta test.</p>
+<p>There are three weather source files necessary for the CalTRACK Methods.</p>
 <ol>
 <li><a href="http://www.CalTRACK.org/weather.html">CZ2010 weather normals for 86 stations in California</a></li>
 <li><a href="https://raw.githubusercontent.com/impactlab/caltrack/master/data-sources/weather/ZipCodetoCZ2010WeatherStationMap.csv">Mapping of zip codes to weather stations</a></li>
