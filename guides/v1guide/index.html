@@ -187,21 +187,20 @@
 <li>Inverse Variance Weighted Means for determining aggregate savings. In determining the average savings over groups of homes, inverse variance weighted means offers a way of dealing with the important consideration that not all site-level savings estimates are equally confident. IVWM emphasizes the savings of homes with good site-level model fits, while deemphasizing sites with poor model fits. This approach comes from meta analysis and is the minimum-variance estimator of a group mean under assumptions of conditional independence. However, two challenges arise in applying IVWMs to group savings. 1) The independence assumption may not hold over areas or time periods because of structural correlation in savings. This means it may be underestimating variances due to correlation structure in the errors. Practically, this may introduce bias in the group mean depending on the correlation structure 2) larger homes will tend to have large variances and smaller homes (and gas use which is closer to 0 in many homes), leading to a potential structural underestimate of group average savings because smaller savings will have smaller variances. 3) sites with very low variances (very close to zero) can lead blow up mean savings estimates (dividing by very small numbers) and require addition checks on the final number used for programmatic purposes. Alternative weighting schemes were discussed by the technical working group, but none were ultimately selected due to similar tradeoffs faced by each weighting scheme. Users of the v1 methods should be aware of the ways that IVWMs both solves for and also creates risks to program implementation and chose the right approach and risk mitigation procedures for the program accordingly.</li>
 </ol>
 <h3 id="further-considerations">Further Considerations</h3>
-<ol>
-<li>The purpose of CalTRACK is to provides an estimate of weather normalized gross savings and is not ia replacement for net savings measurement arrived at through impact evaluations.</li>
-</ol>
+<p>The purpose of CalTRACK is to provides an estimate of weather normalized gross savings and is not a replacement for net savings measurement arrived at through impact evaluations.</p>
 <p>Both aggregator and utility users of CalTRACK should be aware that the CalTRACK methods do not apply corrections for exogenous changes such as economic conditions, energy costs, unobserved weather effects, and other factors that may impact consumption patterns and savings at a population level.</p>
+<p>However, savings from treatment groups as well as control groups (once identified) can be calculated using CalTRACK methods.</p>
 <h3 id="discussions">Discussions</h3>
 <ol>
-<li>[Project Plan and Technical Requirements Working Group Document] (https://docs.google.com/document/d/1mfNgJwzHUrp8SKNVeK8PH0Sjbt8xDb_s3FLblG9A2Qw/edit#heading=h.56f2ui64an9j)</li>
-<li>[Homes with Solar, EVs, etc.] (https://github.com/impactlab/caltrack/issues/36)</li>
-<li>[Missing and anomalous data] (https://github.com/impactlab/caltrack/issues/35)</li>
-<li>[Zip Code Weather Station mapping] (https://github.com/impactlab/caltrack/issues/25)</li>
-<li>[Data prep] (https://github.com/impactlab/caltrack/issues/12)</li>
-<li>[Monthly Data Requirements Specification] (https://github.com/impactlab/caltrack/issues/49)</li>
-<li>[Aggregation rules] (https://github.com/impactlab/caltrack/issues/32)</li>
-<li>[Future Participant Adjustments] (https://github.com/impactlab/caltrack/issues/20)</li>
-<li>[Fixed or variable degree days] (https://github.com/impactlab/caltrack/issues/37)</li>
+<li><a href="https://docs.google.com/document/d/1mfNgJwzHUrp8SKNVeK8PH0Sjbt8xDb_s3FLblG9A2Qw/edit#heading=h.56f2ui64an9j">Project Plan and Technical Requirements Working Group Document</a></li>
+<li><a href="https://github.com/impactlab/caltrack/issues/36">Homes with Solar, EVs, etc.</a></li>
+<li><a href="https://github.com/impactlab/caltrack/issues/35">Missing and anomalous data</a></li>
+<li><a href="https://github.com/impactlab/caltrack/issues/25">Zip Code Weather Station mapping</a></li>
+<li><a href="https://github.com/impactlab/caltrack/issues/12">Data prep</a></li>
+<li><a href="https://github.com/impactlab/caltrack/issues/49">Monthly Data Requirements Specification</a></li>
+<li><a href="https://github.com/impactlab/caltrack/issues/32">Aggregation rules</a></li>
+<li><a href="https://github.com/impactlab/caltrack/issues/20">Future Participant Adjustments</a></li>
+<li><a href="https://github.com/impactlab/caltrack/issues/37">Fixed or variable degree days</a></li>
 </ol>
               
             </div>
