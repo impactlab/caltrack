@@ -1,6 +1,7 @@
 ## CalTRACK Site-level Monthly Gross Savings Estimation Technical Guideline
 
 --------
+** Note: this section is incompletely specified: users should not consider this a complete set of specifications for generating site-level savings estimates from monthly billing data.**  Additional decisions will need to be made about data sufficiency, partitioning variable length monthly billing periods into monthly periods (or not doing so), the type of regression analysis used, how do define blackout periods, and other issues that arise when trying this for the first time using actual monthly billing data.
 
 ### Methodological Overview
 

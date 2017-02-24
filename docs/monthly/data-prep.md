@@ -1,10 +1,12 @@
 
-# Monthly Billing Analysis Data Preparation 
+# Monthly Billing Analysis Data Preparation
 
 CalTRACK employs the following processes when preparing monthly consumption, weather, and project data for performing the monthly billing analysis specified in the CalTRACK v1 monthly methods.
 
 ### *Data Preparation Overview*
 There are countless small decisions that must be made as edge cases in the data arise. Thorough documentation ensures that evaluators understand the implications of these choices. Below are guidelines and a general process for addressing the most common issues that arise during data cleaning efforts for monthly billing analysis. It is recommended conduct these steps in the order they appear because the final combined dataset is highly sensitive to the order of data preparation steps.
+
+** Note: this section is incompletely specified: users should not consider this a complete set of specifications for cleaning monthly billing data.**  Additional decisions will need to be made about dealing with missing data, variable billing period lengths, data sufficiency, and other unanticipated issues.
 
 The CalTRACK data preparations guidelines for monthly billing analysis consist of the following steps:
 
@@ -42,7 +44,7 @@ If a building appears multiple times within a project database and the project d
 ### 2. Weather Data Preparation
 For CalTRACK monthly billing analysis, the weather data requirements are straightforward. For monthly analysis, since the daily average temperature data from a nearby weather station is used to create values for the number of heating degree days (below 60F) and cooling degree days (above 70F) in each billing period, the primary consideration in preparing the data is how to deal with missing values.
 Additional weather data can be found [here] (https://github.com/impactlab/caltrack/blob/master/docs/monthly/data-sources.md#weather)
-For further discussions regarding weather data, see issues #10, #16. 
+For further discussions regarding weather data, see issues #10, #16.
 
 #### Dealing with missing values
 Weather data is notoriously incomplete, especially at the granular sub-daily level. Some weather stations generally fail to report data, other weather stations are simply inconsistent in reporting data. This becomes an issue when trying to match projects to their local weather conditions. If a nearby non-reporting weather station is selected, the savings model will fail. If the project is connected to a nearby intermittently reporting weather station, the model will suffer. Additionally, if a project is connected to a weather station that experiences a significantly different local micro-climate, the model will suffer.
