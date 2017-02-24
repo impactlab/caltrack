@@ -2,14 +2,16 @@
 
 The CalTRACK Version 1.0 specification provides guidance for performing monthly billing analysis for whole home weather normalized gross savings for groups of residential energy efficiency projects.
 
-It includes data requirements and technical specifications for data preparation and cleaning, site-level billing analysis, and aggregation of site-level results.
+It includes data requirements and suggested minimum technical specifications for data preparation and cleaning, site-level billing analysis, and aggregation of site-level results.
 
-The complete technical specification for v1 monthly methods is found in four documents
+**Please note that the recommended specifications included in v1.0 are untested and incomplete; it is not possible to follow the suggested guidance directly and arrive at savings estimates when using monthly billing data.**  CalTRACK v1.0 guidance covers *some* anticipated requirements (based on the collective experience of the beta testers) for how to generate premise-level savings estimates using monthly billing data. We expect that most CalTRACK implementers will use hourly/daily usage data, and consequently the beta testers did not implement any of the suggested v1.0 guidance for data preparation and cleaning or analysis using actual monthly billing data.  **A complete set of specifications for daily methods (v1.1) are forthcoming and will be fully tested and complete.**  Implementers of CalTRACK v1.0 will need to make their own [undocumented] assumptions and introduce additional methods in order to arrive at savings estimates, and since these will be implementer-specific the results of v1.0 analyses will be inconsistent between users.
+
+The technical specification for v1 monthly methods is found in four documents
 
 1. `/monthly/data-sources.md` describes the necessary data requirements for running CalTRACK v1
-2. `/monthly/data-prep.md` describes the sequence of steps required for preparing data for analysis
-3. `/monthly/analysis.md` describes the methods use for calculating site-level savings using monthly data
-4. `/monthly/aggregation.md` describes the methods use for aggregating site-level savings to group or portfolio average and total savings
+2. `/monthly/data-prep.md` describes the sequence of steps (incomplete) required for preparing data for analysis
+3. `/monthly/analysis.md` describes the methods used for calculating site-level savings using monthly data (incomplete)
+4. `/monthly/aggregation.md` describes the methods used for aggregating site-level savings to group or portfolio average and total savings
 
 The specification is intended to be done in order to ensure consistency and replicability.
 
@@ -31,7 +33,7 @@ The two use cases that CalTRACK v1 is intended to support are:
 
 ### Further Considerations
 
-The purpose of CalTRACK is to provides an estimate of weather normalized gross savings and is not a replacement for net savings measurement arrived at through impact evaluations.
+The purpose of CalTRACK is to provide an estimate of weather normalized gross savings and is not a replacement for net savings measurement arrived at through impact evaluations.
 
 Both aggregator and utility users of CalTRACK should be aware that the CalTRACK methods do not apply corrections for exogenous changes such as economic conditions, energy costs, unobserved weather effects, and other factors that may impact consumption patterns and savings at a population level.
 
