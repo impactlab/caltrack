@@ -162,10 +162,10 @@
 <ol>
 <li><code>/monthly/data-sources.md</code> describes the necessary data requirements for running CalTRACK v1</li>
 <li><code>/monthly/data-prep.md</code> describes the sequence of steps required for preparing data for analysis</li>
-<li><code>/monthly/analysis.md</code> describes the methods use for calculating site-level savings using monthly data</li>
-<li><code>/monthly/aggregation.md</code> describes the methods use for aggregating site-level savings to group or portfolio average and total savings</li>
+<li><code>/monthly/analysis.md</code> describes the methods used for calculating site-level savings using monthly data</li>
+<li><code>/monthly/aggregation.md</code> describes the methods used for aggregating site-level savings to group or portfolio average and total savings</li>
 </ol>
-<p>The specification is intended to be done in order to ensure consistency and replicability.</p>
+<p>The specification is intended to be completed in sequential order to ensure consistency and replicability.</p>
 <h3 id="supported-use-cases">Supported Use Cases</h3>
 <p>The CalTRACK v1 monthly billing analysis methods were developed to produce a reliable estimate of basic, weather normalized gross savings at the site level and weighted average gross savings for groups (or portfolios) of projects.</p>
 <p>This definition of gross savings was developed with two specific use cases in mind, and was not intended to extend to all potential uses of monthly billing analysis.</p>
@@ -180,12 +180,11 @@
 <li>Inverse Variance Weighted Means for determining aggregate savings. In determining the average savings over groups of homes, inverse variance weighted means offers a way of dealing with the important consideration that not all site-level savings estimates are equally confident. IVWM emphasizes the savings of homes with good site-level model fits, while deemphasizing sites with poor model fits. This approach comes from meta analysis and is the minimum-variance estimator of a group mean under assumptions of conditional independence. However, two challenges arise in applying IVWMs to group savings. 1) The independence assumption may not hold over areas or time periods because of structural correlation in savings. This means it may be underestimating variances due to correlation structure in the errors. Practically, this may introduce bias in the group mean depending on the correlation structure 2) larger homes will tend to have large variances and smaller homes (and gas use which is closer to 0 in many homes), leading to a potential structural underestimate of group average savings because smaller savings will have smaller variances. 3) sites with very low variances (very close to zero) can lead blow up mean savings estimates (dividing by very small numbers) and require addition checks on the final number used for programmatic purposes. Alternative weighting schemes were discussed by the technical working group, but none were ultimately selected due to similar tradeoffs faced by each weighting scheme. Users of the v1 methods should be aware of the ways that IVWMs both solves for and also creates risks to program implementation and chose the right approach and risk mitigation procedures for the program accordingly.</li>
 </ol>
 <h3 id="further-considerations">Further Considerations</h3>
-<p>The purpose of CalTRACK is to provides an estimate of weather normalized gross savings and is not a replacement for net savings measurement arrived at through impact evaluations.</p>
-<p>Both aggregator and utility users of CalTRACK should be aware that the CalTRACK methods do not apply corrections for exogenous changes such as economic conditions, energy costs, unobserved weather effects, and other factors that may impact consumption patterns and savings at a population level.</p>
-<p>However, savings from treatment groups as well as control groups (once identified) can be calculated using CalTRACK methods.</p>
+<p>The purpose of CalTRACK is to provide an estimate of weather normalized gross savings and is not a replacement for net savings measurement arrived at through impact evaluations.</p>
+<p>Both aggregator and utility users of CalTRACK should be aware that the CalTRACK methods do not apply corrections for exogenous changes such as economic conditions, energy costs, unobserved weather effects, and other factors that may impact net savings at a population and premise level.</p>
 <h3 id="discussions">Discussions</h3>
 <ol>
-<li><a href="https://docs.google.com/document/d/1mfNgJwzHUrp8SKNVeK8PH0Sjbt8xDb_s3FLblG9A2Qw/edit#heading=h.56f2ui64an9j">Project Plan and Technical Requirements Working Group Document</a></li>
+<li><a href="https://docs.google.com/document/d/1mfNgJwzHUrp8SKNVeK8PH0Sjbt8xDb_s3FLblG9A2Qw/edit#heading=h.56f2ui64an9j">Project Plan and Technical Requirements Working Group Document (outdated)</a></li>
 <li><a href="https://github.com/impactlab/caltrack/issues/36">Homes with Solar, EVs, etc.</a></li>
 <li><a href="https://github.com/impactlab/caltrack/issues/35">Missing and anomalous data</a></li>
 <li><a href="https://github.com/impactlab/caltrack/issues/25">Zip Code Weather Station mapping</a></li>

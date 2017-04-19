@@ -166,7 +166,7 @@
                 <h1 id="monthly-billing-analysis-data-preparation">Monthly Billing Analysis Data Preparation</h1>
 <p>CalTRACK employs the following processes when preparing monthly consumption, weather, and project data for performing the monthly billing analysis specified in the CalTRACK v1 monthly methods.</p>
 <h3 id="data-preparation-overview"><em>Data Preparation Overview</em></h3>
-<p>There are countless small decisions that must be made as edge cases in the data arise. Thorough documentation ensures that evaluators understand the implications of these choices. Below are guidelines and a general process for addressing the most common issues that arise during data cleaning efforts for monthly billing analysis. It is recommended conduct these steps in the order they appear because the final combined dataset is highly sensitive to the order of data preparation steps.</p>
+<p>There are countless small decisions that must be made as edge cases in the data arise. Thorough documentation ensures that users understand the implications of these choices. Below are guidelines and a general process for addressing the most common issues that arise during data cleaning efforts for monthly billing analysis. It is recommended that users conduct these steps in the order they appear because the final combined dataset is highly sensitive to the order of data preparation steps.</p>
 <p>The CalTRACK data preparations guidelines for monthly billing analysis consist of the following steps:</p>
 <ol>
 <li>Project data preparation<ul>
@@ -189,20 +189,20 @@
 <li>Final combined data sufficiency checks</li>
 </ol>
 <h3 id="1-project-data-preparation">1. Project Data Preparation</h3>
-<p>The minimum field requirements for project data under the CalTRACK monthly specification are outlined [here] (https://github.com/impactlab/caltrack/blob/master/docs/monthly/data-sources.md). Notably, a prepared project file should consist of one row per project, with a unique ID that can be used to link to gas and/or electric usage data, project start and stop dates, and zip code for the site. The following data cleaning steps for project data are meant to ensure that the prepared project file meets these field requirements and uniqueness constraints.</p>
+<p>The minimum field requirements for project data under the CalTRACK monthly specification are outlined <a href="https://github.com/impactlab/caltrack/blob/master/docs/monthly/data-sources.md">here</a>. Notably, a prepared project file should consist of one row per project, with a unique ID that can be used to link to gas and/or electric usage data, project start and stop dates, and zip code for the site. The following data cleaning steps for project data are meant to ensure that the prepared project file meets these field requirements and uniqueness constraints.</p>
 <h4 id="creating-work-start-and-work-end-dates-from-raw-project-data">Creating Work Start and Work End dates from raw project data</h4>
 <p>Accurately identifying baseline and reporting periods is important for reducing the modeling error associated with a savings calculation. However, considerable variation may occur in database records identifying dates associated with project start and project completion.
 In general, users should try to identify the fields in a project record that most closely match the actual work start and work completion dates. In the absence of either of these fields (that is, if a project record only contains one or the other set of dates), It is recommended that users identify an average time to completion.
 CalTRACK implementations should use official work start date and work end date fields provided by aggregators rather then proxy fields when available.</p>
 <h4 id="dealing-with-miscoded-dates">Dealing with miscoded dates</h4>
-<p>Implausible day values (&gt;31) should be coded as the beginning of month if project start date and end of month if project end date so that the entire month is included in the intervention window
+<p>Implausible day values (&gt;31) should be coded as the beginning of month if project start date and end of month if project end date so that the entire month is included in the intervention window.
 Implausible month and year values should be flagged and that home not included in estimation.</p>
 <h4 id="deduplicate-project-records">Deduplicate project records</h4>
-<p>If a building appears multiple times within a project database, and the project dates are the same the most complete record for that building should be used
+<p>If a building appears multiple times within a project database, and the project dates are the same the most complete record for that building should be used.
 If a building appears multiple times within a project database and the project dates differ because there are multiple measures installed associated with the same incentive program, the start date of the intervention should be the earliest of the project start dates across projects and the end date for the intervention should be the latest of the project end dates.</p>
 <h3 id="2-weather-data-preparation">2. Weather Data Preparation</h3>
 <p>For CalTRACK monthly billing analysis, the weather data requirements are straightforward. For monthly analysis, since the daily average temperature data from a nearby weather station is used to create values for the number of heating degree days (below 60F) and cooling degree days (above 70F) in each billing period, the primary consideration in preparing the data is how to deal with missing values.
-Additional weather data can be found [here] (https://github.com/impactlab/caltrack/blob/master/docs/monthly/data-sources.md#weather)
+Additional weather data can be found <a href="https://github.com/impactlab/caltrack/blob/master/docs/monthly/data-sources.md#weather">here</a>
 For further discussions regarding weather data, see issues #10, #16. </p>
 <h4 id="dealing-with-missing-values">Dealing with missing values</h4>
 <p>Weather data is notoriously incomplete, especially at the granular sub-daily level. Some weather stations generally fail to report data, other weather stations are simply inconsistent in reporting data. This becomes an issue when trying to match projects to their local weather conditions. If a nearby non-reporting weather station is selected, the savings model will fail. If the project is connected to a nearby intermittently reporting weather station, the model will suffer. Additionally, if a project is connected to a weather station that experiences a significantly different local micro-climate, the model will suffer.
@@ -223,15 +223,15 @@ For further discussions regarding weather data, see issues #10, #16. </p>
 <h3 id="5-linked-projectuse-data-preparation">5. Linked project+use data preparation</h3>
 <h4 id="deduplicate-records-based-on-combined-attributes">Deduplicate records based on combined attributes</h4>
 <ul>
-<li>If two duplicate records have identical consumption traces and date ranges, drop one at random</li>
+<li>If two duplicate records have identical consumption traces and date ranges, drop one at random.</li>
 <li>If two duplicate records have identical consumption traces but different date ranges select the more complete record having more dates. * If the dates are contiguous, or there are overlapping dates with the same usage values, combine the two traces into a single trace.</li>
 <li>If the records have the same date ranges, but different usage values, the project should be flagged and the record excluded from the sample.</li>
 </ul>
 <h4 id="drop-records-not-meeting-data-sufficiency-requirements">Drop records not meeting data sufficiency requirements</h4>
 <p>Calculating energy efficiency savings requires a sufficient observation period of energy usage prior to and after an intervention. Generally, annualized models require at least 12 months of usage data on each side of an intervention in order to accurately calculate energy savings. Some models may be able to calculate energy savings with fewer than 12 months of data in the reporting period.
-<em> 12 complete months pre-retrofit for monthly billing data to qualify for estimation or 24 months with up to 2 missing values from different, non-contiguous months
-</em> Post retrofit data sufficiency for estimation will be dealt with in [post-estimation model fit criterion] (https://github.com/impactlab/caltrack/blob/master/docs/monthly/analysis.md#3-fit-all-candidate-models-and-apply-qualification-criteria)
-* Total annual savings estimates will require 12 months post-retrofit</p>
+<em> 12 complete months pre-retrofit for monthly billing data to qualify for estimation or 24 months with up to 2 missing values from different, non-contiguous months.
+</em> Post retrofit data sufficiency for estimation will be dealt with in <a href="https://github.com/impactlab/caltrack/blob/master/docs/monthly/analysis.md#3-fit-all-candidate-models-and-apply-qualification-criteria">post-estimation model fit criterion</a>.
+* Total annual savings estimates will require 12 months post-retrofit.</p>
 <h4 id="drop-project-records-with-unsupported-characteristics">Drop project records with unsupported characteristics</h4>
 <ul>
 <li>Drop homes with known PV or EV added 12 months prior to or up to 12 months after the intervention. During the CalTRACK beta test, these homes were identified from the presence of reverse flow in the AMI data and/or indications of net metering in the cross reference tables. However, if you only have access to billing data, CalTRACK recommends working with the utility to get flags for accounts that have net metering present so they can be excluded from the analysis.</li>
@@ -244,8 +244,8 @@ For further discussions regarding weather data, see issues #10, #16. </p>
 </ul>
 <h3 id="7-final-combined-data-sufficiency-checks">7. Final combined data sufficiency checks</h3>
 <ul>
-<li>Billing periods (the period between bill start date and bill end date in the monthly usage data) with more than 10% missing days of weather data will be thrown out and count against the required number of billing period observations</li>
-<li>Any projects with fewer than 12 months pre and 12 months post are not included in the analysis</li>
+<li>Billing periods (the period between bill start date and bill end date in the monthly usage data) with more than 10% missing days of weather data will be thrown out and count against the required number of billing period observations.</li>
+<li>Any projects with fewer than 12 months pre and 12 months post are not included in the analysis.</li>
 </ul>
               
             </div>
