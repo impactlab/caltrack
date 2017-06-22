@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Technical Documentation for CalTRACK savings estimation">
+  <meta name="description" content="Technical Documentation for CalTRACK savings estimation procedures">
   
   <link rel="shortcut icon" href="./img/favicon.ico">
   <title>Home - CalTRACK Technical Documentation</title>
@@ -52,7 +52,7 @@
         
             <ul>
             
-                <li class="toctree-l3"><a href="#caltrack-technical-documentation">CalTRACK Technical Documentation</a></li>
+                <li class="toctree-l3"><a href="#caltrack-executive-summary">CalTRACK Executive Summary</a></li>
                 
             
             </ul>
@@ -62,48 +62,40 @@
           
             <li>
     <ul class="subnav">
-    <li><span>Getting Started Guides</span></li>
+    <li><span>Technical Specifications</span></li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="guides/v1guide/">Guide to Version 1.0 Monthly Methods</a>
-        
-    </li>
-
-        
-    </ul>
-<li>
-          
-            <li>
-    <ul class="subnav">
-    <li><span>Monthly</span></li>
-
-        
-            
-    <li class="toctree-l1 ">
-        <a class="" href="monthly/data-sources/">Data Sources for Monthly Methods</a>
+        <a class="" href="data-sources/v1.0/README/">Data Sources</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="monthly/data-prep/">Data Preparation for Monthly Methods</a>
+        <a class="" href="data-prep/v1.0/README/">Data Preparation</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="monthly/analysis/">Analysis of Monthly Data</a>
+        <a class="" href="savings-calculations/v1.0/monthly/README/">Analysis of Monthly Data</a>
         
     </li>
 
         
             
     <li class="toctree-l1 ">
-        <a class="" href="monthly/aggregation/">Aggregration of Site-level Savings</a>
+        <a class="" href="savings-calculations/v1.0/daily/README/">Analysis of Daily Data</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="aggregation/v1.0/README/">Aggregration of Site-level Savings</a>
         
     </li>
 
@@ -136,6 +128,9 @@
     <li>Home</li>
     <li class="wy-breadcrumbs-aside">
       
+        <a href="https://github.com/impactlab/caltrack/edit/master/docs/index.md"
+          class="icon icon-github"> Edit on GitHub</a>
+      
     </li>
   </ul>
   <hr/>
@@ -143,40 +138,51 @@
           <div role="main">
             <div class="section">
               
-                <h1 id="caltrack-technical-documentation">CalTRACK Technical Documentation</h1>
-<p>This site represents the official technical documentation for CalTRACK, a set of open methods developed and tested through a multi-stakeholder process for estimating gross savings for residential energy efficiency programs in California.</p>
-<p>Initial draft requirements for CalTRACK were developed by the CalTRACK technical working group and tested using data from PG&amp;E to empirically verify assumptions and identify areas of sensitivity, the modify publish official versions of the methods through an open source process. </p>
-<p>Communication for CalTRACK methods development happens primarily through <a href="https://github.com/impactlab/caltrack/issues">Github issues</a> and using a community communication tool called Slack. The documentation, as well as results from testing, discussion, and guidance for contribution can be found on the <a href="https://github.com/impactlab/caltrack">CalTRACK Github repository</a></p>
-<hr />
-<p><strong>CalTRACK Working Group Contributors:</strong></p>
-<p>Leif Magnuson - PG&amp;E</p>
-<p>Andy Fessel - PG&amp;E</p>
-<p>Brian A. Smith - PG&amp;E</p>
-<p>Charlene Chi-Johnston - PG&amp;E</p>
-<p>Richard Ridge, PhD - PG&amp;E</p>
-<p>Matt Golden - Open Energy Efficiency</p>
-<p>Matt Gee - Open Energy Efficiency</p>
-<p>McGee Young - Open Energy Efficiency</p>
-<p>Jarred Metoyer - DNVGL</p>
-<p>Jonathan Farland - DNVGL</p>
-<p>Jake Oster -  EnergySavvy</p>
-<p>John Backus Mayes - EnergySavvy</p>
-<p>Blake Hough - EnergySavvy</p>
-<p>Ben Polly - NREL</p>
-<p>Beth Reid - Olivine</p>
-<p>Cynthia Swaim - Sempra Utilities</p>
-<p>Denise Parker - SoCal Edison</p>
-<p>Gamaliel Lodge - Optimiser Energy</p>
-<p>Lisa Schmidt - Home Energy Analyzer</p>
-<p>Martha Brook - CEC</p>
-<p>Robert Hansen - CPUC</p>
-<p>Ryan Bullard - SoCal Edison</p>
-<p>Torsten Glidden - Build it Green</p>
-<p>Alfredo Gutierrez - ICF</p>
-<hr />
-<p><strong>Project Lead Technical Consultants:</strong>
-<a href="http://openeemeter.org">Open Energy Efficiency</a></p>
-<p>The Open Energy Efficiency team has provided technical support to the the CalTRACK effort under contract with PG&amp;E since 2012. The core methods that became CalTRACK were initially defined during the Advanced Home Upgrade Software Initiative process, then developed into the OpenEEmeter open source code with support of the California Energy Commission. These methods were then further refined and tested in the final beta phase of this effort, resulting in the CalTRACK v1.0 Methods.</p>
+                <h1 id="caltrack-executive-summary"><strong>CalTRACK Executive Summary</strong></h1>
+<p><strong>Definition</strong></p>
+<p>CalTRACK is a set of methods for calculating site-based, weather-normalized, metered energy savings from an existing conditions baseline and applied to single family residential retrofits using data from utility meters.</p>
+<p><strong>Scope</strong></p>
+<p>CalTRACK can be used by Program Administrators or third party implementers for managing energy efficiency programs. CalTRACK also supports Pay-for-Performance programs by tracking metered savings using calculations that are transparent and replicable. When both parties - purchaser and vendor - use the same standardized set of methods for calculating energy savings, a mature and robust energy efficiency market is possible.</p>
+<p>CalTRACK attempts to comply with<a href="https://leginfo.legislature.ca.gov/faces/billNavClient.xhtml?bill_id=201520160AB802"> AB-802</a> (Williams, 2015) and<a href="https://leginfo.legislature.ca.gov/faces/billNavClient.xhtml?bill_id=201520160SB350"> SB-350</a> (de León, 2015).</p>
+<p>CalTRACK calculates the whole-building site-based savings that result from any mix of measures, building types, and consumer behavior. CalTRACK does not estimate the amount of savings that can be attributed to a particular measure.</p>
+<p>CalTRACK does not take the place of program evaluation. Calculating site-based, weather normalized metered energy savings is often a first step in a program evaluation, but a full evaluation that seeks to control for other effects, such as exogenous factors like economic growth or technology adoption or endogenous factors like socioeconomic status would be expected to consider additional variables.</p>
+<p>These methods focus specifically on calculating site-based, weather-normalized metered energy savings for determining payments under a Pay-for-Performance program, rather than the more evaluation oriented guidance that is found in ASHRAE Guideline 14 or the Uniform Methods Project (UMP). CalTRACK methods do not require energy consumption data from a population of energy users beyond the treatment group.</p>
+<p>CalTRACK allows third-party energy efficiency program implementers to conduct energy savings analysis on their own customers themselves, provided they are given access to their customers’ energy consumption data via Green Button or other means. This ability to track program performance in real time gives implementers an essential tool to monitor their performance and adjust their implementation practices. It also allows aggregators to quantify their expected yields for Pay-for-Performance programs.</p>
+<p><strong>Testing</strong></p>
+<p>The CalTRACK methods were informed by and developed in concert with empirical testing by members of the CalTRACK technical Working Group listed below.</p>
+<p>The empirical testing and refinement of the methods was performed using historical program data supplied by PG&amp;E from an existing home upgrade program and included data from 4,777 homes that were retrofitted during 2014 and 2015. The CalTRACK methods include instructions for data cleaning and formatting as well as a two-stage model for calculating savings and aggregating site based savings into portfolios. The results of the methods testing as well as the deliberations of the working group are documented in GitHub.</p>
+<p>The CalTRACK technical working group’s empirical testing of these methods is archived in a Github repository. The repository contains the results of a variety of tests related to the methods choices. In general, the group limited its discussions to focus on specific technical issues rather than on broader, policy-oriented issues. These discussions can be found in the "<a href="https://github.com/impactlab/caltrack/issues?utf8=%E2%9C%93&amp;q=is%3Aissue">Issues</a>" section of the<a href="https://github.com/impactlab/caltrack"> CalTRACK Github repository</a>. While summary statistics are presented for both monthly and daily analysis, the intent was to use testing to inform methods guidance rather than to provide for a software equivalency testing process.</p>
+<p><strong>Methods</strong></p>
+<p>The technical working group arrived at two sets of methods specifications, the first for calculating savings using monthly data, and the second for calculating savings using daily data. These methods are referred to as Monthly and Daily, respectively, and have each been tagged with a version number of 1.0.</p>
+<p>The purpose of versioning the CalTRACK methods specification that informed the initial guidance is to lay the foundation for further efforts to refine and expand upon these methods. We invite collaboration from stakeholders to perform their own empirical tests of these methods and to offer suggestions for improvement, ideas for how to handle edge cases, or provide further tests to identify potential issues.</p>
+<p>We have taken this first step towards an empirically-informed, professionally-tested, and transparent set of methods. We encourage others to work together to continue to make progress.</p>
+<p><strong>CalTRACK Working Group</strong></p>
+<p>●   <em>Leif Magnuson - PG&amp;E Project Lead</em></p>
+<p>●   <em>Matt Golden - Open Energy Efficiency</em>*</p>
+<p>●   <em>Matt Gee - Open Energy Efficiency</em>*</p>
+<p>●   <em>McGee Young - Open Energy Efficiency</em>*</p>
+<p>●   <em>Ken Agnew – DNV GL</em>*</p>
+<p>●   <em>Jarred Metoyer – DNV GL</em>*</p>
+<p>●   <em>Jonathan Farland – DNV GL</em>*</p>
+<p>●   <em>Ben Polly - NREL</em></p>
+<p>●   <em>Brian A. Smith - PG&amp;E</em></p>
+<p>●   <em>Charlene Chi-Johnston - PG&amp;E</em></p>
+<p>●   <em>Cynthia Swaim - Sempra Utilities​</em></p>
+<p>●   <em>Denise Parker - SoCal Edison</em></p>
+<p>●   <em>Gamaliel Lodge - Optimiser Energy</em></p>
+<p>●   <em>Jake Oster -  EnergySavvy</em>*</p>
+<p>●   <em>John Backus Mayes – EnergySavvy</em>*</p>
+<p>●   <em>Blake Hough – EnergySavvy</em>*</p>
+<p>●   <em>Lisa Schmidt - Home Energy Analyzer</em></p>
+<p>●   <em>Martha Brook - CEC</em></p>
+<p>●   <em>Richard Ridge, PhD - PG&amp;E</em></p>
+<p>●   <em>Robert Hansen - CPUC</em></p>
+<p>●   <em>Ryan Bullard - SoCal Edison</em></p>
+<p>●   <em>Torsten Glidden - Build it Green</em></p>
+<p>●   <em>Alfredo Gutierrez - ICF</em></p>
+<p>●   <em>Able Gomez - RHA</em></p>
+<p>*Open Energy Efficiency, DNV GL, and EnergySavvy participated in methods development and testing for both monthly and daily methods.</p>
+<p>=======</p>
               
             </div>
           </div>
@@ -184,7 +190,7 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="guides/v1guide/" class="btn btn-neutral float-right" title="Guide to Version 1.0 Monthly Methods">Next <span class="icon icon-circle-arrow-right"></span></a>
+        <a href="data-sources/v1.0/README/" class="btn btn-neutral float-right" title="Data Sources">Next <span class="icon icon-circle-arrow-right"></span></a>
       
       
     </div>
@@ -210,9 +216,11 @@
   <div class="rst-versions" role="note" style="cursor: pointer">
     <span class="rst-current-version" data-toggle="rst-current-version">
       
+          <a href="https://github.com/impactlab/caltrack" class="icon icon-github" style="float: left; color: #fcfcfc"> GitHub</a>
       
       
-        <span style="margin-left: 15px"><a href="guides/v1guide/" style="color: #fcfcfc">Next &raquo;</a></span>
+      
+        <span style="margin-left: 15px"><a href="data-sources/v1.0/README/" style="color: #fcfcfc">Next &raquo;</a></span>
       
     </span>
 </div>
@@ -224,5 +232,5 @@
 
 <!--
 MkDocs version : 0.16.1
-Build Date UTC : 2017-04-19 14:38:41
+Build Date UTC : 2017-06-22 01:08:54
 -->
