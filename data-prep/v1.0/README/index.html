@@ -71,7 +71,7 @@
         
             <ul>
             
-                <li class="toctree-l3"><a href="#data-preparation-for-caltrack-beta">Data Preparation for CalTRACK Beta</a></li>
+                <li class="toctree-l3"><a href="#data-preparation-for-caltrack-methods">Data Preparation for CalTRACK Methods</a></li>
                 
                     <li><a class="toctree-l4" href="#overview">Overview</a></li>
                 
@@ -179,12 +179,12 @@
           <div role="main">
             <div class="section">
               
-                <h1 id="data-preparation-for-caltrack-beta">Data Preparation for CalTRACK Beta</h1>
+                <h1 id="data-preparation-for-caltrack-methods">Data Preparation for CalTRACK Methods</h1>
 <p>CalTRACK employs the following processes when preparing weather, project, and daily/hourly/monthly consumption data for performing the analysis specified in the CalTRACK v1.0 methods.</p>
 <h2 id="overview">Overview</h2>
 <p>Below are guidelines and a general process for addressing the most common issues that arise during data cleaning efforts for analysis. It is recommended to conduct these steps in the order they appear because the final combined dataset is highly sensitive to the order of data preparation steps.</p>
 <h2 id="guidelines-on-project-data-preparation">Guidelines on Project Data Preparation</h2>
-<p>The minimum field requirements for project data under the CalTRACK daily specification are outlined <a href="https://github.com/impactlab/caltrack/blob/master/docs/monthly/data-sources.md">here</a>. Notably, a prepared project file should consist of one row per project, with a unique ID that can be used to link to gas and/or electric usage data, project start and stop dates, and zip code for the site.</p>
+<p>The minimum field requirements for project data under the CalTRACK daily specification are outlined <a href="https://github.com/impactlab/caltrack/tree/master/docs/data-sources/v1.0">here</a>. Notably, a prepared project file should consist of one row per project, with a unique ID that can be used to link to gas and/or electric usage data, project start and stop dates, and zip code for the site.</p>
 <p>The following data cleaning steps for project data are meant to ensure that the prepared project file meets these field requirements and uniqueness constraints.</p>
 <h3 id="creating-work-start-and-work-end-dates-from-raw-project-data">Creating Work Start and Work End dates from raw project data</h3>
 <p>Accurately identifying baseline and reporting periods is important for reducing the modeling error associated with a savings calculation. However, considerable variation may occur in database records identifying dates associated with project start and project completion. In general, users should try to identify the fields in a project record that most closely match the actual work start and work completion dates. In the absence of either of these fields (that is, if a project record only contains one or the other set of dates), it is recommended that users identify an average time to completion. CalTRACK implementations should use official work start date and work end date fields provided by aggregators rather than proxy fields when available.</p>
@@ -203,7 +203,7 @@
 <li>Where available, the presence of net-metering is clearly marked (CalTRACK excludes homes that are net-metered)</li>
 <li>Traces are not duplicated in whole or in part</li>
 </ol>
-<p>The dataset generated for the CalTRACK beta test originated from a pool of projects and consumption data provided by PG&amp;E (see <a href="https://github.com/impactlab/caltrack/tree/reorganization/data-sources/v1.0">Data Sources</a>). A smaller set of 1000 natural gas meters and 1000 electricity meters were selected from this larger pool for the purposes of testing. These meters were selected based on location (attempting to maximize coverage over each of the climate zones) and data sufficiency (each meter contains at least two years of historical usage data prior to the intervention period). </p>
+<p>The dataset generated for the CalTRACK beta test originated from a pool of projects and consumption data provided by PG&amp;E (see <a href="https://github.com/impactlab/caltrack/tree/master/docs/data-sources/v1.0">Data Sources</a>). A smaller set of 1000 natural gas meters and 1000 electricity meters were selected from this larger pool for the purposes of testing. These meters were selected based on location (attempting to maximize coverage over each of the climate zones) and data sufficiency (each meter contains at least two years of historical usage data prior to the intervention period). </p>
 <h3 id="roll-up-sub-daily-interval-data-to-daily-totals">Roll up sub-daily interval data to daily totals</h3>
 <p>If using sub-daily interval data (hourly, 15-minute, etc intervals), roll it up to daily totals following this procedure:
 <em> Check to make sure at least 50% of the intervals in the day have usage data.  For electricity, usage values of 0 should count as missing (for gas a usage value of 0 is valid and does not indicate missing data).  If more than 50% of the interval data is missing drop this day from the analysis.
@@ -255,7 +255,6 @@
 <p>Calculating energy efficiency savings requires a sufficient observation period of energy usage prior to and after an intervention. Generally, annualized models require at least 12 months of usage data on each side of an intervention in order to accurately calculate energy savings. Some models may be able to calculate energy savings with fewer than 12 months of data in the reporting period.</p>
 <ul>
 <li>12 complete months pre-retrofit for monthly billing data to qualify for estimation or 24 months with up to 2 missing values from different, non-contiguous months.</li>
-<li>Post retrofit data sufficiency for estimation will be dealt with in <a href="https://github.com/impactlab/caltrack/blob/master/docs/monthly/analysis.md#3-fit-all-candidate-models-and-apply-qualification-criteria">post-estimation model fit criterion</a>.</li>
 <li>Total annual savings estimates will require 12 months post-retrofit.</li>
 </ul>
 <h3 id="drop-project-records-with-unsupported-characteristics_1">Drop project records with unsupported characteristics</h3>
@@ -268,7 +267,7 @@
 <p>Unmatched data should be excluded from analysis.</p>
 <h2 id="guidelines-for-linking-weather-data-and-project-records">Guidelines for Linking Weather Data and Project Records</h2>
 <p>Weather station mapping requires locating the station nearest to the project. Each project file should contain a zip code that allows matching weather stations to projects
-* For California, weather station mapping was done using the 86 station standard mapping of zip code to CZ2010 weather files. Clean versions of these files can be found <a href="https://github.com/impactlab/caltrack/blob/master/tests/data-sources/weather/stationmapping_v2.csv">here</a>.</p>
+* For California, weather station mapping was done using the 86 station standard mapping of zip code to CZ2010 weather files. Clean versions of these files can be found <a href="https://github.com/impactlab/caltrack/tree/master/resources/weather">here</a>.</p>
 <h2 id="guidelines-for-final-combined-data-sufficiency-checks">Guidelines for Final Combined Data Sufficiency Checks</h2>
 <p>It is recommended that you run a final audit of your data to evaluate the outputs of the data cleaning process. You should be able to match the number of projects eliminated from your analysis at each step listed above. Your final audit will also serve as a useful reference for further data analysis and aggregation.</p>
 <ul>

@@ -64,7 +64,7 @@
         
             <ul>
             
-                <li class="toctree-l3"><a href="#data-sources-for-caltrack-daily-methods">Data Sources for CalTRACK Daily Methods</a></li>
+                <li class="toctree-l3"><a href="#data-sources-for-caltrack-methods">Data Sources for CalTRACK Methods</a></li>
                 
                     <li><a class="toctree-l4" href="#project-data">Project Data</a></li>
                 
@@ -150,9 +150,9 @@
           <div role="main">
             <div class="section">
               
-                <h1 id="data-sources-for-caltrack-daily-methods"><strong>Data Sources for CalTRACK Daily Methods</strong></h1>
-<p>Three types of data files are required to run the CalTRACK daily methods: project data, energy consumption data, and weather data. These data must be linked with cross-reference files that define the mapping between ID columns in each of the data source types (Projects ID to Usage ID &amp; Project ID to Weather Station ID).</p>
-<p>This documentation is intended to provide general guidance on these three data sources for use in implementing CalTRACK methods. You can find a more detailed description of the specific project, usage, weather, and cross-reference files used in CalTRACK methods testing <a href="https://github.com/impactlab/caltrack/tree/master/tests/data-sources">here.</a></p>
+                <h1 id="data-sources-for-caltrack-methods"><strong>Data Sources for CalTRACK Methods</strong></h1>
+<p>Three types of data files are required to run the CalTRACK methods: project data, energy consumption data, and weather data. These data must be linked with cross-reference files that define the mapping between ID columns in each of the data source types (Projects ID to Usage ID &amp; Project ID to Weather Station ID).</p>
+<p>This documentation is intended to provide general guidance on these three data sources for use in implementing CalTRACK methods.</p>
 <h2 id="project-data">Project Data</h2>
 <p>While project data can be incredibly rich and incredibly varied, the CalTRACK methods aim to define a minimal set of data fields on projects necessary to perform CalTRACK analysis. Thankfully, this set is comparatively small. To perform CalTRACK analysis, you need to be able to uniquely identify a project, identify the location of the project, and the timing of the efficiency investment or intervention. We recommend your project data take on the general form:</p>
 <table>
@@ -245,7 +245,7 @@
 </table>
 
 <h2 id="weather">Weather</h2>
-<p>Both actual observed weather data and normal year weather data are used in the Caltrack analysis. The appropriate observed weather and normal year weather for each project are determined using the site’s ZIP code, which is mapped to weather stations using <a href="https://github.com/impactlab/caltrack/blob/master/tests/data-sources/weather/ZipCodetoCZ2010WeatherStationMap.csv">the mapping file</a>, which has five fields for each ZIP code in California:</p>
+<p>Both actual observed weather data and normal year weather data are used in the Caltrack analysis. The appropriate observed weather and normal year weather for each project are determined using the site’s ZIP code, which is mapped to weather stations using <a href="https://github.com/impactlab/caltrack/tree/master/resources/weather">the mapping file</a>, which has five fields for each ZIP code in California:</p>
 <table>
   <tr>
     <td>ZipCode</td>
@@ -271,7 +271,7 @@
 
 <p>Once the appropriate WthrStationNum is identified, the observed temperatures can be downloaded from the ISD data set at ftp.ncdc.noaa.gov/pub/data/noaa/, in the format described <a href="https://www1.ncdc.noaa.gov/pub/data/ish/ish-format-document.pdf">here</a>. Two fields on each line of the relevant weather station’s file are used: the date/time (YYYYmmddHHMM, from characters 16-27) and the hourly dry bulb temperature in degrees Celsius (characters 88-92). </p>
 <p>The available hourly temperatures for each day (where day is defined by dropping the HHMM fields from the date/time field) are averaged together and converted to degrees Fahrenheit to produce the daily temperature, which is then used to calculate heating and cooling degree days. Missing data points are ignored as long as at least one hourly temperature reading for a given day is available. </p>
-<p>Normal year temperatures are determined using the CZ2010 files available <a href="http://www.caltrack.org/weather.html">here</a>; the particular file for each ZIP code is identified by the WeatherFile field in the mapping file described above. Again, the only relevant columns are Date (MM/DD/YYYY),Time (HH:MM), and Dry-bulb (C), where the year is ignored. The normal year temperatures are averaged over days as with the ISD observed temperature data.</p>
+<p>Normal year temperatures are determined using the CZ2010 files available <a href="https://github.com/impactlab/caltrack/tree/master/resources/weather">here</a>; the particular file for each ZIP code is identified by the WeatherFile field in the mapping file described above. Again, the only relevant columns are Date (MM/DD/YYYY),Time (HH:MM), and Dry-bulb (C), where the year is ignored. The normal year temperatures are averaged over days as with the ISD observed temperature data.</p>
               
             </div>
           </div>
