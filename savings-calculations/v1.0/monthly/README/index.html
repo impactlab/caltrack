@@ -154,15 +154,24 @@
 <p>Site-level gross savings using monthly billing data (both electricity and gas) will use a two-stage estimation approach that closely follows methodological recommendations in the technical appendices of the Uniform Methods Project for Whole Home Building Analysis and the California Evaluation Project, with some modifications and more specific guidance developed through empirical testing to ensure consistency and replicability of results.</p>
 <p>The idea behind two-stage site-level models is to model the energy use of each house before and after an energy efficiency retrofit.</p>
 <p>More formally, the two-stage approach first fits <strong>two</strong> separate parametric models to daily average energy use, one on the pre-intervention (baseline) period and one on the post-intervention (reporting) period for a single site using an ordinary least squares regression of the general form:</p>
-<p>UPDmi = 𝜇i + 𝛽Hi Hm + 𝛽Ci Cm +  𝜖mi </p>
+<p>
+<script type="math/tex; mode=display">UPD_{mi} = \mu_i + \beta_{Hi}HDD_m + \beta_{Ci}CDD_m + \epsilon_{mi}</script>
+</p>
 <p>Where</p>
-<p>UPDmi is average use (gas in therms, electricity in kWh) per day during billing period m for site i.</p>
-<p>𝜇i is the mean use for site <code>i</code>, or intercept.</p>
-<p>𝛽Hi is the coefficient site <code>i</code> on average heating degree days per day.</p>
-<p>𝛽Ci is the coefficient or site <code>i</code> on average cooling degree days per day.</p>
-<p>Hm is the average number of heating degree days per day in billing period <code>m</code>, which is a function of a fixed base temperature, the average daily temperatures from the weather station matched to site <code>i</code> during the billing period <code>m</code>, and the number of days in billing period <code>m</code> with matched usage and weather data for site <code>i</code>.</p>
-<p>Cm is the average number of cooling degree days per day in month <code>m</code>, which is a function of a selected base temperature, the average daily temperatures from the weather station matched to site <code>i</code> during month <code>m</code>, and the number of days in month <code>m</code> with matched usage and weather data for site <code>i</code>.</p>
-<p>𝜖mi is the site specific error term for a given month.</p>
+<p>
+<script type="math/tex">UPD_{mi}</script> is average use (gas in therms, electricity in kWh) per day during billing period m for site i.</p>
+<p>
+<script type="math/tex">\mu_i</script> is the mean use for site <script type="math/tex">i</script>, or intercept.</p>
+<p>
+<script type="math/tex">\beta_{Hi}</script> is the coefficient site <script type="math/tex">i</script> on average heating degree days per day.</p>
+<p>
+<script type="math/tex">\beta_{Ci}</script> is the coefficient or site <script type="math/tex">i</script> on average cooling degree days per day.</p>
+<p>
+<script type="math/tex">HDD_m</script> is the average number of heating degree days per day in billing period <script type="math/tex">m</script>, which is a function of a fixed base temperature, the average daily temperatures from the weather station matched to site <script type="math/tex">i</script> during the billing period <script type="math/tex">m</script>, and the number of days in billing period <script type="math/tex">m</script> with matched usage and weather data for site <script type="math/tex">i</script>.</p>
+<p>
+<script type="math/tex">CDD_m</script> is the average number of cooling degree days per day in month <script type="math/tex">m</script>, which is a function of a selected base temperature, the average daily temperatures from the weather station matched to site <script type="math/tex">i</script> during month <script type="math/tex">m</script>, and the number of days in month <script type="math/tex">m</script> with matched usage and weather data for site <script type="math/tex">i</script>.</p>
+<p>
+<script type="math/tex">\epsilon_{mi}</script> is the site specific error term for a given month.</p>
 <p>In the second stage, using parameter estimates from the first stage equation, weather normalized savings for both the baseline period and reporting period can be computed by using corresponding temperature normals for the relevant time period (typical year weather normalized gross savings), or by using current-year weather to project forward baseline period use (current year weather normalized gross savings) and differencing between baseline and reporting period estimated or actual use, depending on the quantity of interest.</p>
 <p>This site-level two-stage approach without the use of a comparison group, while having significant limitations and tradeoffs, was decided by the technical working group to be appropriate for the two main use cases for CalTRACK, which emphasize effects on the grid and feedback to software vendors, rather than causal programatic effects. In addition to its long history of use in the EM&amp;V literature, it draws on a methodological foundation developed in the more general literature on piecewise linear regression or segmented regression for policy analysis and effect estimates that is used in fields as diverse as public health, medical research, and econometrics.</p>
 <p>We now proceed with a detailed technical treatment of the steps for monthly savings estimation.</p>
@@ -170,13 +179,21 @@
 <p>CalTRACK savings estimation begins with gas and electric usage data, project data, and weather data that have been cleaned and combined according to the Data Cleaning and Integration technical specification. Starting with the prepared data, site-level monthly gross savings analysis is performed by implementing the following steps:</p>
 <h4 id="1-generate-use-per-day-values-and-separate-usage-data-into-a-pre-and-a-post-intervention-data-series">1. Generate Use Per Day values and separate usage data into a pre- and a post-intervention data series</h4>
 <p>The CalTRACK monthly gross savings analysis uses average use per day (<script type="math/tex">UPD</script>) values for each month by taking the bill-period usage values, then dividing by the number of days in that bill period, as follows:</p>
-<p>UPDm = 1/nUd * sum(Ud)</p>
+<p>
+<script type="math/tex; mode=display">UPD_m = \frac{1}{n_{U_d}} * \sum{U_d}</script>
+</p>
 <p>Where</p>
-<p>UPDm is the average use per day for a given month <code>m</code></p>
-<p>sum(Ud) is the sum of all daily use values (Ud) for a given month `m’</p>
-<p>nUd is the total number of daily use values provided in the usage series that are between the first calendar day of month <code>m</code> and the last calendar day of month <code>m</code></p>
+<p>
+<script type="math/tex">UPD_m</script> is the average use per day for a given month <script type="math/tex">m</script>
+</p>
+<p>
+<script type="math/tex">\sum{U_d}</script> is the sum of all daily use values <script type="math/tex">U_d</script> for a given month <script type="math/tex">m</script>
+</p>
+<p>
+<script type="math/tex">n_{U_d}</script> is the total number of daily use values provided in the usage series that are between the first calendar day of month <script type="math/tex">m</script> and the last calendar day of month <script type="math/tex">m</script>
+</p>
 <p><em>Note: If daily use data for gas or electric is not available, monthly billing data can be used for the monthly billing analysis. However, modifications of the denominators for average use per day and for average HDD and CDD per day are necessary.</em></p>
-<p>Now split the series of UPDm values into pre- and post-intervention periods according to the following rules:</p>
+<p>Now split the series of <script type="math/tex">UPD_m</script> values into pre- and post-intervention periods according to the following rules:</p>
 <p><em>Pre-intervention period</em>: all UPDm values from the beginning of the series up to the the complete billing month prior to the <code>work_start_date</code>. The month containing <code>work_start_date</code> is excluded from this series.</p>
 <p><em>Post-intervention period</em>: all UPDm values from the first billing month after the <code>work_end_date</code> to the end of the series.</p>
 <p><strong>Final data sufficiency qualification check</strong>: All qualifying sites must have at least 12 months of contiguous UPDm values in the pre-intervention series and at least 12 months of contiguous post-intervention UPDm values starting with the month after <code>work_end_date</code>.</p>
@@ -186,51 +203,101 @@
 <p>HDD base temp: 60 F</p>
 <p>CDD base temp: 70 F</p>
 <p>HDD and CDD values are calculated as follows</p>
-<p>HDDm = 1/nUd * sum(max(60 - Tave, 0))</p>
+<p>
+<script type="math/tex; mode=display">HDD_m = \frac{1}{n_{Ud}} * \sum{\max(60 - \bar{T}, 0)}</script>
+</p>
 <p>Where</p>
-<p>HDDm = Average heating degree days per day for billing period <code>m</code></p>
-<p>nUd = the number of days with both weather and usage data</p>
-<p>sum = the sum of the degree  over each day <code>d</code> in billing period <code>m</code></p>
-<p>max = the maximum of the two values in ()</p>
-<p>Tave = the average temperature for day <code>d</code></p>
+<p>
+<script type="math/tex">HDD_m</script> = Average heating degree days per day for billing period <script type="math/tex">m</script>
+</p>
+<p>
+<script type="math/tex">n_{U_d}</script> = the number of days with both weather and usage data</p>
+<p>
+<script type="math/tex">\sum{}</script> = the sum of the degree  over each day <script type="math/tex">d</script> in billing period <script type="math/tex">m</script>
+</p>
+<p>
+<script type="math/tex">\max{}</script> = the maximum of the two values in ()</p>
+<p>
+<script type="math/tex">\bar{T}</script> = the average temperature for day <script type="math/tex">d</script>
+</p>
 <p>And</p>
-<p>CDDm = 1/nUd * sum(max(ave_temp_d - 70, 0))</p>
+<p>
+<script type="math/tex; mode=display"> CDD_m = \frac{1}{n_{Ud}} * \sum{\max(\bar{T_d} - 70, 0)}</script>
+</p>
 <p>Where</p>
-<p>CDDm = Cooling degree days for billing period <code>m</code></p>
-<p>nUd = the number of days with both weather and usage data</p>
-<p>sum = the sum of values in {} over each day <code>d</code> in billing period <code>m</code></p>
-<p>max = the maximum of the two values in ()</p>
-<p>Tave = the average temperature for day <code>d</code></p>
+<p>
+<script type="math/tex">CDD_m</script> = Cooling degree days for billing period <script type="math/tex">m</script>
+</p>
+<p>
+<script type="math/tex">n_{Ud}</script> = the number of days with both weather and usage data</p>
+<p>
+<script type="math/tex">\sum{}</script> = the sum of values in {} over each day <script type="math/tex">d</script> in billing period <script type="math/tex">m</script>
+</p>
+<p>
+<script type="math/tex">\max{}</script> = the maximum of the two values in ()</p>
+<p>
+<script type="math/tex">\bar{T_d}</script> = the average temperature for day <script type="math/tex">d</script>
+</p>
 <p><em>Daily average temperatures are taken from the GSOD average data temperature dataset provided by NOAA</em></p>
 <h4 id="3-fit-all-candidate-models-and-apply-qualification-criteria">3. Fit All Candidate Models and Apply Qualification Criteria</h4>
 <p>For each site, all allowable models will be run as candidate models and then have minimum fitness criteria set for qualification.</p>
 <p>For CalTRACK electric monthly savings analysis, the following candidate models are fit:</p>
-<p>UPDmi = 𝜇i + 𝛽Hi Hm + 𝛽Ci Cm +  𝜖mi</p>
-<p>UPDmi = 𝜇i + 𝛽HiHm +  𝜖mi</p>
-<p>UPDmi = 𝜇i + 𝛽CiCm +  𝜖mi</p>
-<p>UPDmi = 𝜇i + 𝜖mi</p>
+<p>
+<script type="math/tex; mode=display">UPD_{mi} = \mu_i + \beta_{Hi}HDD_m + \beta_{Ci}CDD_m +  \epsilon_{mi}</script>
+</p>
+<p>
+<script type="math/tex; mode=display">UPD_{mi} = \mu_i + \beta_{Hi}HDD_m + \epsilon_{mi}</script>
+</p>
+<p>
+<script type="math/tex; mode=display">UPD_{mi} = \mu_i + \beta_{Ci}CDD_m+ \epsilon_{mi}</script>
+</p>
+<p>
+<script type="math/tex; mode=display">UPD_{mi} = \mu_i + \epsilon_{mi}</script>
+</p>
 <p>with the constraints</p>
-<p>𝛽H &gt; 0</p>
-<p>𝛽C &gt; 0</p>
-<p>𝜇i &gt; 0</p>
+<p>
+<script type="math/tex; mode=display">\beta_H > 0</script>
+</p>
+<p>
+<script type="math/tex; mode=display">\beta_C > 0</script>
+</p>
+<p>
+<script type="math/tex; mode=display">\mu_i > 0</script>
+</p>
 <p>For electric, qualifying models for selection must have each parameter estimate meet the minimum significance criteria of p &lt; 0.1 and are strictly positive. All qualifying models are considered for final model selection.</p>
 <p>For CalTRACK gas monthly savings analysis, the following candidate models are fit:</p>
-<p>UPDmi = 𝜇i + 𝛽Hi Hm +  𝜖mi</p>
-<p>UPDmi = 𝜇i + 𝛽Ci Cm +  𝜖mi</p>
-<p>UPDmi = 𝜇i + 𝜖mi</p>
+<p>
+<script type="math/tex; mode=display">UPD_{mi} = \mu_i + \beta_{Hi}HDD_m + \epsilon_{mi}</script>
+</p>
+<p>
+<script type="math/tex; mode=display">UPD_{mi} = \mu_i + \beta_{Ci}CDD_m+ \epsilon_{mi}</script>
+</p>
+<p>
+<script type="math/tex; mode=display">UPD_{mi} = \mu_i + \epsilon_{mi}</script>
+</p>
 <p>with the constraints</p>
-<p>𝛽H &gt; 0</p>
-<p>𝜇i &gt; 0</p>
-<p>If each parameter estimate meets minimum significance criteria (p &lt; 0.1) and are strictly positive, then the model is a qualifying model for inclusion in model selection.</p>
+<p>
+<script type="math/tex; mode=display">\beta_H > 0</script>
+</p>
+<p>
+<script type="math/tex; mode=display">\mu_i > 0</script>
+</p>
+<p>If each parameter estimate meets minimum significance criteria <script type="math/tex">(p < 0.1)</script> and are strictly positive, then the model is a qualifying model for inclusion in model selection.</p>
 <h4 id="4-select-the-best-for-pre-intervenion-and-post-intervention-periods-for-use-in-second-stage-savings-estimation">4. Select the best for pre-intervenion and post-intervention periods for use in second-stage savings estimation</h4>
 <p>All qualifying pre-intervention models are compared to each other and among qualifying models, the model with the maximum adjusted R-squared will be selected for second-stage savings estimation.</p>
 <p>For the monthly billing analysis, because we are using fixed degree days instead of variable degree days, adjusted R-squared will be defined as</p>
-<p>adj R^2 = 1 - (SSres/df_e) / (SStot/df_t)</p>
+<p>
+<script type="math/tex; mode=display">R^2_{adj} = 1 - \frac{(SS_{res}/df_e)}{(SS_{tot}/df_t)}</script>
+</p>
 <p>Where</p>
-<p>SSres is the sum of squares of residuals</p>
-<p>df_e is the degrees of freedom of the estimate of the underlying population error variance, and is calculated using <code>n-p-1</code>, where <code>n</code> is the number of observations in the sample used to estimate the model and <code>p</code> is the number of explanatory variables, not including the constant term and not including degree day base temperature as a parameter because it’s fixed</p>
-<p>SStot is the total sum of squares</p>
-<p>df_t is the degrees of freedom of the estimate of the population variance of the dependent variable, and is calculated as <code>n-1</code>, were <code>n</code> is the size of the sample use to estimate the model</p>
+<p>
+<script type="math/tex">SS_{res}</script> is the sum of squares of residuals</p>
+<p>
+<script type="math/tex">df_e</script> is the degrees of freedom of the estimate of the underlying population error variance, and is calculated using <code>n-p-1</code>, where <code>n</code> is the number of observations in the sample used to estimate the model and <code>p</code> is the number of explanatory variables, not including the constant term and not including degree day base temperature as a parameter because it’s fixed</p>
+<p>
+<script type="math/tex">SS_{tot}</script> is the total sum of squares</p>
+<p>
+<script type="math/tex">df_t</script> is the degrees of freedom of the estimate of the population variance of the dependent variable, and is calculated as <code>n-1</code>, were <code>n</code> is the size of the sample use to estimate the model</p>
 <p>All qualifying post-intervention models are compared to each other and among qualifying models, the model with the maximum adjusted R-squared will be selected for second-stage savings estimation.</p>
 <h4 id="5-estimate-second-stage-gross-savings-quantities-based-on-selected-first-stage-pre-and-post-intervention-models">5. Estimate second-stage gross savings quantities based on selected first stage pre- and post-intervention models</h4>
 <p>During the second stage, up to five savings quantities will be estimated for each site that meets the minimum data sufficiency criteria for that savings statistic.</p>

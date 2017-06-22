@@ -153,15 +153,27 @@
 <h3 id="methodological-overview"><strong>Methodological Overview</strong></h3>
 <p>Site-level Gross Savings using daily billing data (both electricity and gas) will use a two-stage estimation approach that builds on the technical appendix of the Uniform Methods Project for Whole Home Building Analysis and the California Evaluation Project, while providing more specific guidance to ensure replicability and address specific methodological issues related to both the data sources and the CalTRACK-specific use cases that are not addressed in prior standards.</p>
 <p>The two-stage approach fits two separate parametric models to daily energy use data in both the pre-intervention (baseline) period and the post-intervention (reporting) period using ordinary least squares with the following first stage equation:</p>
-<p>UPDDi = 𝜇i + 𝛽HiHD + 𝛽CiCD + 𝜖Di</p>
+<p>
+<script type="math/tex; mode=display">UPD_{di} = \mu_i + \beta_{Hi}HDD_d + \beta_{Ci}CDD_d + \epsilon_{di}</script>
+</p>
 <p>Where:</p>
-<p>UPDDi is the total use (therms for gas, kWh for electricity) per day on day, D, for site, i</p>
-<p>𝜇i is the mean use for site, i</p>
-<p>𝛽Hi is the coefficient for site, i, of heating degree days</p>
-<p>𝛽Ci is the coefficient for site, i, of cooling degree days</p>
-<p>HD is the number of heating degree days on day, D, calculated as <code>max(heating balance point - average daily temperature at site i, 0)</code></p>
-<p>CD is the number of cooling degree days on day, D, calculated as <code>max(average daily temperature at site i - cooling balance point, 0)</code></p>
-<p>𝜖Di is the error term at site, i, for day, D</p>
+<p>
+<script type="math/tex">UPD_{di}</script> is the total use (therms for gas, kWh for electricity) per day on day, <script type="math/tex">d</script>, for site, <script type="math/tex">i</script>
+</p>
+<p>
+<script type="math/tex">\mu_i</script> is the mean use for site, <script type="math/tex">i</script>
+</p>
+<p>
+<script type="math/tex">\beta_{Hi}</script> is the coefficient for site, <script type="math/tex">i</script>, of heating degree days</p>
+<p>
+<script type="math/tex">\beta_{Ci}</script> is the coefficient for site, <script type="math/tex">i</script>, of cooling degree days</p>
+<p>
+<script type="math/tex">HDD_d</script> is the number of heating degree days on day, <script type="math/tex">d</script>, calculated as <code>max(heating balance point - average daily temperature at site i, 0)</code></p>
+<p>
+<script type="math/tex">CDD_d</script> is the number of cooling degree days on day, <script type="math/tex">d</script>, calculated as <code>max(average daily temperature at site i - cooling balance point, 0)</code></p>
+<p>
+<script type="math/tex">\epsilon_{di}</script> is the error term at site, <script type="math/tex">i</script>, for day, <script type="math/tex">d</script>
+</p>
 <p><strong>Note</strong>: during the beta test we explored the use of robust linear regression instead of ordinary least squares but ultimately decided to use ordinary least squares for the initial CalTRACK use case.  A robust regression may offer some significant advantages, as described <a href="https://github.com/impactlab/caltrack/issues/56">here</a> along with our reasons for sticking with ordinary least squares, and is worth considering as a future improvement to these methods.</p>
 <p>In the second stage, using parameter estimates from the first stage equation, weather normalized savings for both the baseline period and reporting period can be computed by using corresponding temperature normals for the relevant time period (typical year weather normalized gross savings), or by using current-year weather to project forward baseline period use (current year weather normalized gross savings) and differencing between baseline and reporting period estimated or actual use, depending on the quantity of interest.</p>
 <p>We now proceed with a detailed technical treatment of the steps for daily savings estimation.</p>
@@ -169,7 +181,7 @@
 <p>CalTRACK savings estimation begins with gas and electric usage data, project data, and weather data that have been cleaned and combined according to the Data Preparation technical specification. Starting with the prepared data, site-level daily gross savings analysis is performed by implementing the following steps:</p>
 <ol>
 <li>
-<p>Usage data used in the CalTRACK daily analysis will be done on Use Per Day (UPD) values from daily AMI usage data.</p>
+<p>Usage data used in the CalTRACK daily analysis will be done on Use Per Day (<script type="math/tex">UPD</script>) values from daily AMI usage data.</p>
 </li>
 <li>
 <p>Stage one modeling will be done sequentially as a joint optimization problem using minimum model qualification criteria to constrain the space of candidate models, then using model selection criteria for choosing the "best" among candidate models for savings estimation.</p>
@@ -177,10 +189,10 @@
 </ol>
 <p><strong>Variable Degree Day Base Temperature Search and Optimization</strong></p>
 <p>CalTRACK daily methods will use variable degree day base temperatures. Balance point temperatures will be selected by doing a search over the one or two parameter HDD and CDD models separately using the following grid search criteria:</p>
-<p>1) Search range for HDD base temp: <code>55 degrees F to 65 degrees F</code>
-2) Search range for CDD base temp: <code>65 degrees F to 75 degrees F</code>
-3) With the constraint <code>HDD Base Temp</code>&lt;=<code>CDD Base Temp</code></p>
-<p>4) Grid search step size: <code>1 degrees</code></p>
+<p>1) Search range for HDD base temp: <code>55 degrees F to 65 degrees F</code></p>
+<p>2) Search range for CDD base temp: <code>65 degrees F to 75 degrees F</code></p>
+<p>3) With the constraint <code>HDD Base Temp</code>&lt;=<code>CDD Base Temp</code></p>
+<p>4) Grid search step size: <code>1 degree</code></p>
 <p><strong>Grid Search Data Sufficiency</strong></p>
 <p>When searching across balance points, only model those balance points for which there are either: </p>
 <ul>
@@ -202,10 +214,13 @@
 <p>Qualifying models are those meeting the following constraints:</p>
 </li>
 <li>
-<p><code>beta_HDD, beta_CDD &gt;= 0</code></p>
+<p>
+<script type="math/tex"> \beta_{Hi}, \beta_{Ci} >= 0 </script>
+</p>
 </li>
 <li>
-<p>p-values for <code>beta_HDD</code> and  <code>beta_CDD</code> are &lt; 0.1</p>
+<p>p-values for <script type="math/tex">\beta_{Hi}</script> and  <script type="math/tex">\beta_{Ci}</script> are <script type="math/tex">< 0.1</script>
+</p>
 </li>
 </ol>
 <p><strong>Model Selection/Optimization</strong></p>
