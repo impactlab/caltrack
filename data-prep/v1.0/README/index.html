@@ -85,8 +85,6 @@
                 
                     <li><a class="toctree-l4" href="#guidelines-for-linking-project-and-usage-files">Guidelines for Linking Project and Usage Files</a></li>
                 
-                    <li><a class="toctree-l4" href="#guidelines-for-linking-weather-data-and-project-records">Guidelines for Linking Weather Data and Project Records</a></li>
-                
                     <li><a class="toctree-l4" href="#guidelines-for-final-combined-data-sufficiency-checks">Guidelines for Final Combined Data Sufficiency Checks</a></li>
                 
             
@@ -184,7 +182,7 @@
 <h2 id="overview">Overview</h2>
 <p>Below are guidelines and a general process for addressing the most common issues that arise during data cleaning efforts for analysis. It is recommended to conduct these steps in the order they appear because the final combined dataset is highly sensitive to the order of data preparation steps.</p>
 <h2 id="guidelines-on-project-data-preparation">Guidelines on Project Data Preparation</h2>
-<p>The minimum field requirements for project data under the CalTRACK daily specification are outlined <a href="https://github.com/impactlab/caltrack/tree/master/docs/data-sources/v1.0">here</a>. Notably, a prepared project file should consist of one row per project, with a unique ID that can be used to link to gas and/or electric usage data, project start and stop dates, and zip code for the site.</p>
+<p>The minimum field requirements for project data under the CalTRACK daily specification are outlined <a href="http://docs.caltrack.org/data-sources/v1.0/README/">here</a>. Notably, a prepared project file should consist of one row per project, with a unique ID that can be used to link to gas and/or electric usage data, project start and stop dates, and zip code for the site.</p>
 <p>The following data cleaning steps for project data are meant to ensure that the prepared project file meets these field requirements and uniqueness constraints.</p>
 <h3 id="creating-work-start-and-work-end-dates-from-raw-project-data">Creating Work Start and Work End dates from raw project data</h3>
 <p>Accurately identifying baseline and reporting periods is important for reducing the modeling error associated with a savings calculation. However, considerable variation may occur in database records identifying dates associated with project start and project completion. In general, users should try to identify the fields in a project record that most closely match the actual work start and work completion dates. In the absence of either of these fields (that is, if a project record only contains one or the other set of dates), it is recommended that users identify an average time to completion. CalTRACK implementations should use official work start date and work end date fields provided by aggregators rather than proxy fields when available.</p>
@@ -193,8 +191,8 @@
 <h3 id="deduplicate-project-records">Deduplicate project records</h3>
 <p>If a building appears multiple times within a project database, and the project dates are the same, the most complete record for that building should be used. If a building appears multiple times within a project database and the project dates differ because there are multiple measures installed associated with the same incentive program, the start date of the intervention should be the earliest of the project start dates across projects and the end date for the intervention should be the latest of the project end dates.</p>
 <h2 id="guidelines-on-weather-data-preparation">Guidelines on Weather Data Preparation</h2>
-<p>Weather data is obtained from ftp.ncdc.noaa.gov for the NOAA weather station nearest each project site, however for California see section 4 below (use CZ 2010). Hourly ISD temperature readings are deduplicated, keeping the first reading for each hour, and then averaged for each day in the baseline, project, and reporting periods. Similarly, daily average TMY3 temperatures are used to characterize the normal year weather for each site. Daily averages are not subject to any minimum number of hourly readings per day. </p>
-<p>Hourly weather values correspond to the hour of their timestamp, not the previous hours’ weather.</p>
+<p>Weather station mapping requires locating the station nearest to the project. Each project file should contain a zip code that allows matching weather stations to projects
+* For California, weather station mapping was done using the 86 station standard mapping of zip code to CZ2010 weather files. Clean versions of these files can be found <a href="https://github.com/impactlab/caltrack/tree/master/resources/weather">here</a>.</p>
 <h2 id="guidelines-on-daily-electric-and-gas-usage-preparation">Guidelines on Daily Electric and Gas Usage Preparation</h2>
 <p>Generally, the quality of your consumption data may vary substantially from sample to sample. You will need to clean your data so that it meets the following requirements:</p>
 <ol>
@@ -265,9 +263,6 @@
 <h2 id="guidelines-for-linking-project-and-usage-files">Guidelines for Linking Project and Usage Files</h2>
 <p>Once project, consumption, and weather data have met all of their respective requirements, the data must be matched in order for a savings estimation to be performed. CalTRACK recommends using a key such as a utility account number that will clearly match a given project with a given meter. However, we also recognize that in certain cases, a project may encompass more than one meter or utility account. In these cases, CalTRACK does not offer specific guidance.</p>
 <p>Unmatched data should be excluded from analysis.</p>
-<h2 id="guidelines-for-linking-weather-data-and-project-records">Guidelines for Linking Weather Data and Project Records</h2>
-<p>Weather station mapping requires locating the station nearest to the project. Each project file should contain a zip code that allows matching weather stations to projects
-* For California, weather station mapping was done using the 86 station standard mapping of zip code to CZ2010 weather files. Clean versions of these files can be found <a href="https://github.com/impactlab/caltrack/tree/master/resources/weather">here</a>.</p>
 <h2 id="guidelines-for-final-combined-data-sufficiency-checks">Guidelines for Final Combined Data Sufficiency Checks</h2>
 <p>It is recommended that you run a final audit of your data to evaluate the outputs of the data cleaning process. You should be able to match the number of projects eliminated from your analysis at each step listed above. Your final audit will also serve as a useful reference for further data analysis and aggregation.</p>
 <ul>
@@ -276,242 +271,394 @@
 </ul>
 <h1 id="detailed-data-preparation-instructions">Detailed Data Preparation Instructions</h1>
 <p>What follows in an example of data prep steps that could be used to create files for analysis. These steps are one example implementation of the guidelines laid out above.</p>
-<p>Overall, 3 types of files are generated during this process for use in the CalTRACK methods:
-1. Project data
-2. Trace data
-3. Project to Trace mappings</p>
-<p>The Project Data file should have the following fields:
-1. <em>project_id</em>: A unique identifier for the project (should occur once in the file).
-2. <em>zipcode</em>: Used for linking weather data for the project.
-3. <em>baseline_period_end</em>: Date the project started - usage data prior to this is used to establish a baseline.
-4. <em>reporting_period_start</em>: Date the project ended. Usage after this is used to determine savings against the baseline.</p>
-<p>Trace Data files should have the following fields:
-1. <em>trace_id</em>: A unique identifier for the trace (can occur more than once in the file to identify individual trace records).
-2. <em>unit</em>: Unit of measurement for the trace record (“KWH” or “THERM”).
-3. <em>estimated</em>: Whether this is an estimated reading (“True” or “False”).
-4. <em>interpretation</em>: For purposes of this data, one of the following is always used:
-    1. ELECTRICITY_CONSUMPTION_SUPPLIED - Represents the amount of utility-supplied electrical energy consumed on-site, as metered at a single usage point, such as a utility-owned electricity meter. Specifically does not include consumption of electricity generated on site, such as by locally installed solar photovoltaic panels.
-    2. ELECTRICITY_ON_SITE_GENERATION_UNCONSUMED - Represents the amount of excess locally generated energy, which instead of being consumed on-site, is fed back into the grid or sold back a utility.
-    3. NATURAL_GAS_CONSUMPTION_SUPPLIED - Represents the amount of energy supplied by a utility in the form of natural gas and used on site, as metered at a single usage point.
-5. <em>start</em>: Starting date time for the trace record.
-6. <em>value</em>: Value of the trace record (i.e. number of KWH/THERM)</p>
-<p>Project to Trace mapping files contain just two fields:
-1. <em>project_id</em>
-2. <em>trace_id</em></p>
+<p>Overall, 3 types of files are generated during this process for use in the CalTRACK methods:</p>
+<ol>
+<li>Project data</li>
+<li>Trace data</li>
+<li>Project to Trace mappings</li>
+</ol>
+<p>The Project Data file should have the following fields:</p>
+<ol>
+<li><em>project_id</em>: A unique identifier for the project (should occur once in the file).</li>
+<li><em>zipcode</em>: Used for linking weather data for the project.</li>
+<li><em>baseline_period_end</em>: Date the project started - usage data prior to this is used to establish a baseline.</li>
+<li><em>reporting_period_start</em>: Date the project ended. Usage after this is used to determine savings against the baseline.</li>
+</ol>
+<p>Trace Data files should have the following fields:</p>
+<ol>
+<li><em>trace_id</em>: A unique identifier for the trace (can occur more than once in the file to identify individual trace records).</li>
+<li><em>unit</em>: Unit of measurement for the trace record (“KWH” or “THERM”).</li>
+<li><em>estimated</em>: Whether this is an estimated reading (“True” or “False”).</li>
+<li>
+<p><em>interpretation</em>: For purposes of this data, one of the following is always used:</p>
+<ol>
+<li>ELECTRICITY_CONSUMPTION_SUPPLIED - Represents the amount of utility-supplied electrical energy consumed on-site, as metered at a single usage point, such as a utility-owned electricity meter. Specifically does not include consumption of electricity generated on site, such as by locally installed solar photovoltaic panels.</li>
+<li>ELECTRICITY_ON_SITE_GENERATION_UNCONSUMED - Represents the amount of excess locally generated energy, which instead of being consumed on-site, is fed back into the grid or sold back a utility.</li>
+<li>NATURAL_GAS_CONSUMPTION_SUPPLIED - Represents the amount of energy supplied by a utility in the form of natural gas and used on site, as metered at a single usage point.</li>
+</ol>
+</li>
+<li>
+<p><em>start</em>: Starting date time for the trace record.</p>
+</li>
+<li><em>value</em>: Value of the trace record (i.e. number of KWH/THERM)</li>
+</ol>
+<p>Project to Trace mapping files contain just two fields:</p>
+<ol>
+<li><em>project_id</em></li>
+<li><em>trace_id</em></li>
+</ol>
 <p>A fourth type of file containing weather data is also used, but is not generated by the data prep process - weather data is described in greater detail in the <strong>Link weather data and project records</strong> section below.</p>
-<p>The CalTRACK data preparations guidelines for daily analysis consist of the following steps:
-1. Cross Reference File Preparation
-2. Project Data Preparation
-3. 15 Minute Electric Use Preparation
-4. Hourly Electric Use Preparation
-5. Monthly Electric Use Preparation
-6. Daily Gas Use Preparation
-7. Monthly Gas Use Preparation
-8. Linking Projects to Usage/Trace Data</p>
+<p>The CalTRACK data preparations guidelines for daily analysis consist of the following steps:</p>
+<ol>
+<li>Cross Reference File Preparation</li>
+<li>Project Data Preparation</li>
+<li>15 Minute Electric Use Preparation</li>
+<li>Hourly Electric Use Preparation</li>
+<li>Monthly Electric Use Preparation</li>
+<li>Daily Gas Use Preparation</li>
+<li>Monthly Gas Use Preparation</li>
+<li>Linking Projects to Usage/Trace Data</li>
+</ol>
 <h2 id="file-list">File List</h2>
-<p>Cross Reference Files
-1. EES25162_ELECINTV_XREF_CPUC.csv (Electricity Cross Reference)
-2. EES25162_GASINTV_XREF_CPUC.csv (Gas Cross Reference 1 of 2)
-3. EES25162_GASINTV2_XREF_CPUC.csv (Gas Cross Reference 2 of 2)</p>
-<p>Project Files
-1. CalTrack (AHU) from 1_1_14<strong>6_30_15_v2_FINAL_090816.csv
-2. CalTrack (AHU) from 7_1_15</strong>6_30_16_v2_FINAL_090816.csv
-3. CalTrack (AHUP) from 1_1_14__6_30_15_v2_FINAL_090816.csv</p>
-<p>Usage Files
-1. IDA.15MIN.SMY1.EES25162-EHUP.20160719161716.csv (15 minute electricity)
-2. EES25162_gasdy_160720.csv (daily gas 1 of 2)
-3. EES25162_gasdy_160920.csv (daily gas 2 of 2)
-4. IDA.60MIN.SMY1.EES25162-EHUP.20160719161716.csv (hourly electricity)
-5. EES25162.ERESBL12 (1).XPT (monthly electricity 1 of 4)
-6. EES25162.ERESBL13.XPT (monthly electricity 2 of 4)
-7. EES25162.ERESBL15.XPT (monthly electricity 3 of 4)
-8. EES25162.ERESBL16.XPT (monthly electricity 4 of 4)
-9. EES25162.G2RSBL12.XPT (monthly gas 1 of 11)
-10. EES25162.G2RSBL13.XPT (monthly gas 2 of 11)
-11. EES25162.G2RSBL14.XPT (monthly gas 3 of 11)
-12. EES25162.G2RSBL15.XPT (monthly gas 4 of 11)
-13. EES25162.G2RSBL16.XPT (monthly gas 5 of 11)
-14. EES25162.GRESBL12.XPT (monthly gas 6 of 11)
-15. EES25162.GRESBL13.XPT (monthly gas 7 of 11)
-16. EES25162.GRESBL14.XPT (monthly gas 8 of 11)
-17. EES25162.GRESBL15.XPT (monthly gas 9 of 11)
-18. EES25162.GRESBL16.JANJUNE.XPT (monthly gas 10 of 11)
-19. EES25162.GRESBL16.XPT (monthly gas 11 of 11)</p>
+<p>Cross Reference Files</p>
+<ol>
+<li>EES25162_ELECINTV_XREF_CPUC.csv (Electricity Cross Reference)</li>
+<li>EES25162_GASINTV_XREF_CPUC.csv (Gas Cross Reference 1 of 2)</li>
+<li>EES25162_GASINTV2_XREF_CPUC.csv (Gas Cross Reference 2 of 2)</li>
+</ol>
+<p>Project Files</p>
+<ol>
+<li>CalTrack (AHU) from 1_1_14__6_30_15_v2_FINAL_090816.csv</li>
+<li>CalTrack (AHU) from 7_1_15__6_30_16_v2_FINAL_090816.csv</li>
+<li>CalTrack (AHUP) from 1_1_14__6_30_15_v2_FINAL_090816.csv</li>
+</ol>
+<p>Usage Files</p>
+<ol>
+<li>IDA.15MIN.SMY1.EES25162-EHUP.20160719161716.csv (15 minute electricity)</li>
+<li>EES25162_gasdy_160720.csv (daily gas 1 of 2)</li>
+<li>EES25162_gasdy_160920.csv (daily gas 2 of 2)</li>
+<li>IDA.60MIN.SMY1.EES25162-EHUP.20160719161716.csv (hourly electricity)</li>
+<li>EES25162.ERESBL12 (1).XPT (monthly electricity 1 of 4)</li>
+<li>EES25162.ERESBL13.XPT (monthly electricity 2 of 4)</li>
+<li>EES25162.ERESBL15.XPT (monthly electricity 3 of 4)</li>
+<li>EES25162.ERESBL16.XPT (monthly electricity 4 of 4)</li>
+<li>EES25162.G2RSBL12.XPT (monthly gas 1 of 11)</li>
+<li>EES25162.G2RSBL13.XPT (monthly gas 2 of 11)</li>
+<li>EES25162.G2RSBL14.XPT (monthly gas 3 of 11)</li>
+<li>EES25162.G2RSBL15.XPT (monthly gas 4 of 11)</li>
+<li>EES25162.G2RSBL16.XPT (monthly gas 5 of 11)</li>
+<li>EES25162.GRESBL12.XPT (monthly gas 6 of 11)</li>
+<li>EES25162.GRESBL13.XPT (monthly gas 7 of 11)</li>
+<li>EES25162.GRESBL14.XPT (monthly gas 8 of 11)</li>
+<li>EES25162.GRESBL15.XPT (monthly gas 9 of 11)</li>
+<li>EES25162.GRESBL16.JANJUNE.XPT (monthly gas 10 of 11)</li>
+<li>EES25162.GRESBL16.XPT (monthly gas 11 of 11)</li>
+</ol>
 <h2 id="cross-reference-file-preparation">Cross Reference File preparation</h2>
-<p>A series of cross reference files are provided that can be used to link projects to usage information. These are:
-1. EES25162_ELECINTV_XREF_CPUC.csv (Electricity Cross Reference)
-2. EES25162_GASINTV_XREF_CPUC.csv (Gas Cross Reference 1 of 2)
-3. EES25162_GASINTV2_XREF_CPUC.csv (Gas Cross Reference 2 of 2)</p>
+<p>A series of cross reference files are provided that can be used to link projects to usage information. These are:</p>
+<ol>
+<li>EES25162_ELECINTV_XREF_CPUC.csv (Electricity Cross Reference)</li>
+<li>EES25162_GASINTV_XREF_CPUC.csv (Gas Cross Reference 1 of 2)</li>
+<li>EES25162_GASINTV2_XREF_CPUC.csv (Gas Cross Reference 2 of 2)</li>
+</ol>
 <p>It is recommended that cross reference (or “xref”) files be prepared first since they contain information that will be useful in formatting the project and usage data in later steps.</p>
-<p>Also required for this cleaning step will be the following:
-1. IDA.15MIN.SMY1.EES25162-EHUP.20160719161716.csv (15 minute electricity)
-2. IDA.60MIN.SMY1.EES25162-EHUP.20160719161716.csv (hourly electricity)</p>
-<p>With the electricity cross reference file, perform the following:
-1. Obtain all net metered Service Account Ids from the 15 minute file electricity file.
-    a. In the 15 minute and hourly electricity data, any record where <em>DIR</em> is <em>R</em> is net metered.
-2. Obtain all net metered SA ids from the hourly electricity file, combine with those found in step 1.
-3. Left pad with zeroes (or zfill) to 10 all <em>char_prem_id</em>s.
-4. Using the Electricity Cross Reference file, build a map of <em>sa_id</em> to <em>char_prem_id</em>.
-5. Using a combination of the Electricity Cross Reference file, the net metered SA id set from steps 1 and 2, and the map from 4, add the <em>is_net_metered</em> column to the Electricity Cross Reference file.
-    a. Any row in the file that has <em>net_mtr_ind</em> set to <em>Y</em> is net metered
-    b. Any row that has an <em>sa_id</em> in the set from steps 1 and 2 is net metered
-5. Build a map of <em>sa_id</em> to <em>char_prem_id</em>.
-6. Build a map of <em>sp_id</em> to <em>char_prem_id</em>.</p>
+<p>Also required for this cleaning step will be the following:</p>
+<ol>
+<li>IDA.15MIN.SMY1.EES25162-EHUP.20160719161716.csv (15 minute electricity)</li>
+<li>IDA.60MIN.SMY1.EES25162-EHUP.20160719161716.csv (hourly electricity)</li>
+</ol>
+<p>With the electricity cross reference file, perform the following:</p>
+<ol>
+<li>
+<p>Obtain all net metered Service Account Ids from the 15 minute file electricity file.</p>
+<ol>
+<li>In the 15 minute and hourly electricity data, any record where <em>DIR</em> is <em>R</em> is net metered.</li>
+</ol>
+</li>
+<li>
+<p>Obtain all net metered SA ids from the hourly electricity file, combine with those found in step 1.</p>
+</li>
+<li>Left pad with zeroes (or zfill) to 10 all <em>char_prem_id</em>s.</li>
+<li>Using the Electricity Cross Reference file, build a map of <em>sa_id</em> to <em>char_prem_id</em>.</li>
+<li>
+<p>Using a combination of the Electricity Cross Reference file, the net metered SA id set from steps 1 and 2, and the map from 4, add the <em>is_net_metered</em> column to the Electricity Cross Reference file.</p>
+<ol>
+<li>Any row in the file that has <em>net_mtr_ind</em> set to <em>Y</em> is net metered</li>
+<li>Any row that has an <em>sa_id</em> in the set from steps 1 and 2 is net metered</li>
+</ol>
+</li>
+<li>
+<p>Build a map of <em>sa_id</em> to <em>char_prem_id</em>.</p>
+</li>
+<li>Build a map of <em>sp_id</em> to <em>char_prem_id</em>.</li>
+</ol>
 <p>Your Electricity Cross Reference file now has what is needed. In future steps, the map from step 5 will be used to help map projects, and any project that is net metered should be excluded from analysis.</p>
 <p>Upon completion, your finalized Electricity Cross Reference file should contain 8004 records (not including header).</p>
-<p>With the gas cross reference file, perform the following:
-1. Combine the two files into a single CSV.
-2. Left pad with zeroes (or zfill) the <em>char_prem_id</em>s.
-3. Build a map of <em>sa_id</em> to <em>char_prem_id</em>.
-4. Build a map of <em>sp_id</em> to <em>char_prem_id</em>.</p>
+<p>With the gas cross reference file, perform the following:</p>
+<ol>
+<li>Combine the two files into a single CSV.</li>
+<li>Left pad with zeroes (or zfill) the <em>char_prem_id</em>s.</li>
+<li>Build a map of <em>sa_id</em> to <em>char_prem_id</em>.</li>
+<li>Build a map of <em>sp_id</em> to <em>char_prem_id</em>.</li>
+</ol>
 <p>You now have a single Gas Cross Reference file. In future steps, the map from step 3 will be used to help map projects, while the map in step 4 will be used to help map traces.</p>
 <p>Upon completion, your finalized Gas Cross Reference file should contain 6928 records (not including header).</p>
 <h2 id="project-data-preparation">Project data preparation</h2>
-<p>In the beta test data, the following files were provided containing project information:
-1. CalTrack (AHU) from 1_1_14<strong>6_30_15_v2_FINAL_090816.csv
-2. CalTrack (AHU) from 7_1_15</strong>6_30_16_v2_FINAL_090816.csv
-3. CalTrack (AHUP) from 1_1_14__6_30_15_v2_FINAL_090816.csv</p>
+<p>In the beta test data, the following files were provided containing project information:</p>
+<ol>
+<li>CalTrack (AHU) from 1_1_14__6_30_15_v2_FINAL_090816.csv</li>
+<li>CalTrack (AHU) from 7_1_15__6_30_16_v2_FINAL_090816.csv</li>
+<li>CalTrack (AHUP) from 1_1_14__6_30_15_v2_FINAL_090816.csv</li>
+</ol>
 <p>You’ll also be using the <em>sa_id</em> to <em>char_prem_id</em> maps you created from the Electric and Gas Cross Reference Files in the <strong>Cross Reference File Preparation</strong> section above.</p>
-<p>Perform the following:
-1. Combine the 3 project files into a single file.
-    a. The <em>CalTrack (AHUP) from 1_1_14__6_30_15_v2_FINAL_090816.csv</em> file has a column called <em>Application: Application No.</em> instead of simply <em>Application No.</em> like the other two files - the column should be treated the same when combining the files.
-2. Estimate project dates using the combined file - each project should have a <em>Work Start Date</em> and a <em>Work Finish Date</em>.
-    1. For each row, check if the <em>Notice to Proceed Issued</em> column is blank.
-        1. If it is, this is a project from one of the AHU files. Set the <em>Work Start Date</em> to the <em>Initial Approval Date</em> and the <em>Work Finish Date</em> to the <em>Initial Submission Date</em>.
-        2. If it is not, this is a project from the AHUP file. Set the <em>Work Start Date</em> to the <em>Notice to Proceed Issued</em>.
-            1. If the <em>Full Application Returned</em> field is blank, set the <em>Work Finish Date</em> to <em>Full Application Submitted</em>.
-            2. Otherwise set <em>Work Finish Date</em> to <em>Full Application Started</em>.
-    2. If after completing step 2a above your <em>Work Finish Date</em> is still blank and your <em>Work Start Date</em> is not, set the <em>Work Finish Date</em> to 60 days after the <em>Work Start Date</em>.
-3. Using the <em>sa_id</em> to <em>char_prem_id</em> maps you saved from <strong>Cross Reference File Preparation</strong>, add a <em>char_prem_id</em> column to your combined project file.
-    1. For each row, check <em>Electric Service ID</em> against the <em>sa_id</em> in your electric map.
-    2. For each row, check <em>Gas Service ID</em> against the <em>sa_id</em> in your gas map.
-4. Merge duplicate projects into one project.
-    1. There should only be one project per <em>char_prem_id</em>. Build a dictionary with <em>char_prem_id</em> as the key and a list of projects as the value.
-    2. If there is more than one project for a <em>char_prem_id</em>, merge the projects.
-        1. Set <em>Work Start Date</em> to the earliest available.
-        2. Set <em>Work Finish Date</em> to the latest available.
-5. Build a map of <em>char_prem_id</em> to <em>Application No.</em> for later use in mapping projects to traces.
-6. Translate the file into the format required. If using the format laid out in <strong>Overview</strong>, map the following:
-    1. <em>project_id</em> -&gt; Application No.
-    2. <em>zipcode</em> -&gt; Building ZIP Code
-    3. <em>baseline_period_end</em> -&gt; Work Start Date
-    4. reporting_period_start -&gt; Work Finish Date</p>
+<p>Perform the following:</p>
+<ol>
+<li>
+<p>Combine the 3 project files into a single file.</p>
+<ol>
+<li>The <em>CalTrack (AHUP) from 1_1_14__6_30_15_v2_FINAL_090816.csv</em> file has a column called <em>Application: Application No.</em> instead of simply <em>Application No.</em> like the other two files - the column should be treated the same when combining the files.</li>
+</ol>
+</li>
+<li>
+<p>Estimate project dates using the combined file - each project should have a <em>Work Start Date</em> and a <em>Work Finish Date</em>.</p>
+<ol>
+<li>
+<p>For each row, check if the <em>Notice to Proceed Issued</em> column is blank.</p>
+<ol>
+<li>If it is, this is a project from one of the AHU files. Set the <em>Work Start Date</em> to the <em>Initial Approval Date</em> and the <em>Work Finish Date</em> to the <em>Initial Submission Date</em>.</li>
+<li>
+<p>If it is not, this is a project from the AHUP file. Set the <em>Work Start Date</em> to the <em>Notice to Proceed Issued</em>.</p>
+<ol>
+<li>If the <em>Full Application Returned</em> field is blank, set the <em>Work Finish Date</em> to <em>Full Application Submitted</em>.</li>
+<li>Otherwise set <em>Work Finish Date</em> to <em>Full Application Started</em>.</li>
+</ol>
+</li>
+</ol>
+</li>
+<li>
+<p>If after completing step 2a above your <em>Work Finish Date</em> is still blank and your <em>Work Start Date</em> is not, set the <em>Work Finish Date</em> to 60 days after the <em>Work Start Date</em>.</p>
+</li>
+</ol>
+</li>
+<li>
+<p>Using the <em>sa_id</em> to <em>char_prem_id</em> maps you saved from <strong>Cross Reference File Preparation</strong>, add a <em>char_prem_id</em> column to your combined project file.</p>
+<ol>
+<li>For each row, check <em>Electric Service ID</em> against the <em>sa_id</em> in your electric map.</li>
+<li>For each row, check <em>Gas Service ID</em> against the <em>sa_id</em> in your gas map.</li>
+</ol>
+</li>
+<li>
+<p>Merge duplicate projects into one project.</p>
+<ol>
+<li>There should only be one project per <em>char_prem_id</em>. Build a dictionary with <em>char_prem_id</em> as the key and a list of projects as the value.</li>
+<li>
+<p>If there is more than one project for a <em>char_prem_id</em>, merge the projects.</p>
+<ol>
+<li>Set <em>Work Start Date</em> to the earliest available.</li>
+<li>Set <em>Work Finish Date</em> to the latest available.</li>
+</ol>
+</li>
+</ol>
+</li>
+<li>
+<p>Build a map of <em>char_prem_id</em> to <em>Application No.</em> for later use in mapping projects to traces.</p>
+</li>
+<li>
+<p>Translate the file into the format required. If using the format laid out in <strong>Overview</strong>, map the following:</p>
+<ol>
+<li><em>project_id</em> -&gt; Application No.</li>
+<li><em>zipcode</em> -&gt; Building ZIP Code</li>
+<li><em>baseline_period_end</em> -&gt; Work Start Date</li>
+<li>reporting_period_start -&gt; Work Finish Date</li>
+</ol>
+</li>
+</ol>
 <p>Upon completion you should have 4206 projects.</p>
 <h2 id="15-minute-electric-use-preparation">15 Minute Electric Use Preparation</h2>
-<p>The following file is cleaned and formatted in this section:
-1. IDA.15MIN.SMY1.EES25162-EHUP.20160719161716.csv (15 minute electricity)</p>
+<p>The following file is cleaned and formatted in this section:</p>
+<ol>
+<li>IDA.15MIN.SMY1.EES25162-EHUP.20160719161716.csv (15 minute electricity)</li>
+</ol>
 <p>In this section we’ll also begin building a dictionary of projects to traces. This will be added to by subsequent usage data preparation steps.</p>
-<p>Perform the following:
-1. Adjust the dates in the <em>DATE</em> column to <em>yyyy-MM-dd</em> format for sorting purposes.
-2. Sort the file by <em>DIR</em>, then <em>SPID</em>, then <em>DATE</em>.
-3. Remove duplicate records.
-    1. Since the file is now sorted, compare the previous row's <em>DATE</em> and <em>SPID</em>. If they are the same, check each of the interval columns. If all match, throw out one of the records. 566 duplicates should be removed this way across 163 unique SPIDs.
-4. Format trace records.
-    1. <em>trace_id</em> -&gt; <code>elec-15min-[SA]-[SPID]-[DIR]</code>
-    2. If <em>DIR</em> is <em>D</em>, the <em>interpretation</em> is <em>ELECTRICITY_CONSUMPTION_SUPPLIED</em>. If <em>R</em>, it is <em>ELECTRICITY_ON_SITE_GENERATION_UNCONSUMED</em>.
-    3. <em>estimated</em> -&gt; False
-    4. <em>unit</em> -&gt; KWH
-    5. For <em>start</em>, it is necessary to unroll each trace in the file into a separate line/record per interval column. i.e. <code>00:15,00:30,00:45 ... 24:00</code> become separate lines with start of <code>DATE + 00:15, DATE + 00:30, etc.</code>
-    6. For <em>value</em>, assign the value of the column in step 4.5.
-    7. Using the map created in electricity step 6 of <strong>Cross Reference File Preparation</strong>, check the <em>SPID</em> to get a <em>char_prem_id</em>. Check the <em>char_prem_id</em> against the map you created in step 5 of <strong>Project File Preparation</strong> above. Using the project id (or <em>Application No.</em>) as the dictionary key with a list as the value, add the trace id from step a above to that list. You’ll be continuing to build this as you perform additional steps.</p>
+<p>Perform the following:</p>
+<ol>
+<li>Adjust the dates in the <em>DATE</em> column to <em>yyyy-MM-dd</em> format for sorting purposes.</li>
+<li>Sort the file by <em>DIR</em>, then <em>SPID</em>, then <em>DATE</em>.</li>
+<li>
+<p>Remove duplicate records.</p>
+<ol>
+<li>Since the file is now sorted, compare the previous row's <em>DATE</em> and <em>SPID</em>. If they are the same, check each of the interval columns. If all match, throw out one of the records. 566 duplicates should be removed this way across 163 unique SPIDs.</li>
+</ol>
+</li>
+<li>
+<p>Format trace records.</p>
+<ol>
+<li><em>trace_id</em> -&gt; <code>elec-15min-[SA]-[SPID]-[DIR]</code></li>
+<li>If <em>DIR</em> is <em>D</em>, the <em>interpretation</em> is <em>ELECTRICITY_CONSUMPTION_SUPPLIED</em>. If <em>R</em>, it is <em>ELECTRICITY_ON_SITE_GENERATION_UNCONSUMED</em>.</li>
+<li><em>estimated</em> -&gt; False</li>
+<li><em>unit</em> -&gt; KWH</li>
+<li>For <em>start</em>, it is necessary to unroll each trace in the file into a separate line/record per interval column. i.e. <code>00:15,00:30,00:45 ... 24:00</code> become separate lines with start of <code>DATE + 00:15, DATE + 00:30, etc.</code></li>
+<li>For <em>value</em>, assign the value of the column in step 4.5.</li>
+<li>Using the map created in electricity step 6 of <strong>Cross Reference File Preparation</strong>, check the <em>SPID</em> to get a <em>char_prem_id</em>. Check the <em>char_prem_id</em> against the map you created in step 5 of <strong>Project File Preparation</strong> above. Using the project id (or <em>Application No.</em>) as the dictionary key with a list as the value, add the trace id from step a above to that list. You’ll be continuing to build this as you perform additional steps.</li>
+</ol>
+</li>
+</ol>
 <p>This step should yield 19,355,328 trace records and 400 traces.</p>
 <p>Optionally, between step 3 and 4 you could split the file into multiple CSVs to make the files easier to work with.</p>
 <h2 id="hourly-electric-use-preparation">Hourly Electric Use Preparation</h2>
-<p>The following file is cleaned and formatted in this section:
-1. IDA.60MIN.SMY1.EES25162-EHUP.20160719161716.csv (hourly electricity)</p>
+<p>The following file is cleaned and formatted in this section:</p>
+<ol>
+<li>IDA.60MIN.SMY1.EES25162-EHUP.20160719161716.csv (hourly electricity)</li>
+</ol>
 <p>Many of the steps performed here match those in <strong>15 Minute Electric Use Preparation</strong>, so it is possible to reuse some of what you have done already if desired.</p>
-<p>Perform the following:
-1. Adjust the dates in the <em>DATE</em> column to <code>yyyy-MM-dd</code> format for sorting purposes.
-2. Sort the file by <em>DIR</em>, then <em>SPID</em>, then <em>DATE</em>.
-3. Remove duplicate records.
-    1. Since the file is now sorted, compare the previous row’s <em>DATE</em> and <em>SPID</em>. If they are the same, check each of the interval columns. If all match, throw out one of the records.
-4. Format trace records.
-    1. <em>trace_id</em> -&gt; <code>elec-hourly-[SA]-[SPID]-[DIR]</code>
-    2. If <em>DIR</em> is <em>D</em>, the <em>interpretation</em> is <em>ELECTRICITY_CONSUMPTION_SUPPLIED</em>. If <em>R</em>, it is <em>ELECTRICITY_ON_SITE_GENERATION_UNCONSUMED</em>.
-    3. <em>estimated</em> -&gt; False
-    4. <em>unit</em> -&gt; KWH
-    5. For <em>start</em>, it is necessary to unroll each interval column into a separate line/record. i.e. <code>01:00,02:00,03:00 ... 24:00</code> become separate lines with <em>start</em> of <code>DATE + 01:00, DATE + 02:00</code>, etc.
-    6. For <em>value</em>, assign the value of the column in step 4.5.
-    7. Using the map created in electricity step 6 of <strong>Cross Reference File Preparation</strong>, check the <em>SPID</em> to get a <em>char_prem_id</em>. Check the <em>char_prem_id</em> against the map you created in step 5 of <strong>Project File Preparation</strong> above. Using the project id (or <em>Application No.</em>) as the dictionary key with a list as the value, add the trace id from step a above to that list. You’ll be continuing to build this as you perform additional steps.</p>
+<p>Perform the following:</p>
+<ol>
+<li>Adjust the dates in the <em>DATE</em> column to <code>yyyy-MM-dd</code> format for sorting purposes.</li>
+<li>Sort the file by <em>DIR</em>, then <em>SPID</em>, then <em>DATE</em>.</li>
+<li>
+<p>Remove duplicate records.</p>
+<ol>
+<li>Since the file is now sorted, compare the previous row’s <em>DATE</em> and <em>SPID</em>. If they are the same, check each of the interval columns. If all match, throw out one of the records.</li>
+</ol>
+</li>
+<li>
+<p>Format trace records.</p>
+<ol>
+<li><em>trace_id</em> -&gt; <code>elec-hourly-[SA]-[SPID]-[DIR]</code></li>
+<li>If <em>DIR</em> is <em>D</em>, the <em>interpretation</em> is <em>ELECTRICITY_CONSUMPTION_SUPPLIED</em>. If <em>R</em>, it is <em>ELECTRICITY_ON_SITE_GENERATION_UNCONSUMED</em>.</li>
+<li><em>estimated</em> -&gt; False</li>
+<li><em>unit</em> -&gt; KWH</li>
+<li>For <em>start</em>, it is necessary to unroll each interval column into a separate line/record. i.e. <code>01:00,02:00,03:00 ... 24:00</code> become separate lines with <em>start</em> of <code>DATE + 01:00, DATE + 02:00</code>, etc.</li>
+<li>For <em>value</em>, assign the value of the column in step 4.5.</li>
+<li>Using the map created in electricity step 6 of <strong>Cross Reference File Preparation</strong>, check the <em>SPID</em> to get a <em>char_prem_id</em>. Check the <em>char_prem_id</em> against the map you created in step 5 of <strong>Project File Preparation</strong> above. Using the project id (or <em>Application No.</em>) as the dictionary key with a list as the value, add the trace id from step a above to that list. You’ll be continuing to build this as you perform additional steps.</li>
+</ol>
+</li>
+</ol>
 <p>Optionally, between step 3 and 4 you could split the file into multiple CSVs to make the files easier to work with. This is advisable for this file in particular since it is quite large.</p>
 <p>This step should yield 161,755,296 trace records and 8,778 traces.</p>
 <h2 id="monthly-electric-use-preparation">Monthly Electric Use Preparation</h2>
-<p>The following files are cleaned and formatted in this section:
-1. EES25162.ERESBL12 (1).XPT (monthly electricity 1 of 4)
-2. EES25162.ERESBL13.XPT (monthly electricity 2 of 4)
-3. EES25162.ERESBL15.XPT (monthly electricity 3 of 4)
-4. EES25162.ERESBL16.XPT (monthly electricity 4 of 4)</p>
+<p>The following files are cleaned and formatted in this section:</p>
+<ol>
+<li>EES25162.ERESBL12 (1).XPT (monthly electricity 1 of 4)</li>
+<li>EES25162.ERESBL13.XPT (monthly electricity 2 of 4)</li>
+<li>EES25162.ERESBL15.XPT (monthly electricity 3 of 4)</li>
+<li>EES25162.ERESBL16.XPT (monthly electricity 4 of 4)</li>
+</ol>
 <p>These files are in SAS XPORT format: http://support.sas.com/techsup/technote/ts140.pdf
 Your first step will be to convert these into CSV files to perform operations that, by now, are likely becoming familiar. The Python xport library (https://pypi.python.org/pypi/xport/) is one option for doing this conversion easily.</p>
-<p>For each file in the list above, perform the following:
-1. Convert from XPORT to CSV format.
-2. Sort the file by <em>SA_ID</em>.
-3. Remove duplicate records.
-    1. With the file sorted by <em>SA_ID</em>, you can simply check whether the previous <em>SA_ID</em> matches the current <em>SA_ID</em>. If it does, discard one of the records. There should be no duplicate records in this data.
-4. Convert the SAS dates.
-    1. SAS dates are represented as a number of days since 1960-Jan-01.
-    2. The file has columns named <code>CDT__1, CDT__2...  CDT__12</code> for the months of the year (as well as <code>KWH__1, KWH__2... KWH__12</code> for the consumption values that correspond to those months). Each of the <em>CDT<strong>x<em> dates needs to be converted.
-5. Pad left with zeroes to 10 (zfill) the </em>PREM_ID<em>.
-6. Format trace records.
-    1. </em>trace_id<em> -&gt; “elec_monthly_” + SA_ID 
-    2. </em>interpretation<em> -&gt; ELECTRICITY_CONSUMPTION_SUPPLIED
-    3. For </em>start<em>, it is necessary to unroll each interval column into a separate line/record. i.e. the value in <code>CDT__1, CDT__2</code> (which should be a converted date value from step 4) should have its own record where it is the start.
-    4. For </em>value<em>, it is necessary to match the </em>CDT</strong>x</em> column in step 6.3 with a value column. i.e. <em>CDT<strong>1<em> matches the value column </em>KWH</strong>1</em>. As previously stated, these belong on their own line/record.
-    5. <em>estimated</em> -&gt; False
-    6. <em>unit</em> -&gt; KWH
-    7. Check the <em>PREM_ID</em> against the map you created in step 5 of <strong>Project File Preparation</strong> above. Using the project id (or <em>Application No.</em>) as the dictionary key with a list as the value, add the trace id from step a above to that list. You’ll be continuing to build this as you perform additional steps.</p>
+<p>For each file in the list above, perform the following:</p>
+<ol>
+<li>Convert from XPORT to CSV format.</li>
+<li>Sort the file by <em>SA_ID</em>.</li>
+<li>
+<p>Remove duplicate records.</p>
+<ol>
+<li>With the file sorted by <em>SA_ID</em>, you can simply check whether the previous <em>SA_ID</em> matches the current <em>SA_ID</em>. If it does, discard one of the records. There should be no duplicate records in this data.</li>
+</ol>
+</li>
+<li>
+<p>Convert the SAS dates.</p>
+<ol>
+<li>SAS dates are represented as a number of days since 1960-Jan-01.</li>
+<li>The file has columns named <code>CDT__1, CDT__2...  CDT__12</code> for the months of the year (as well as <code>KWH__1, KWH__2... KWH__12</code> for the consumption values that correspond to those months). Each of the <em>CDT__x</em> dates needs to be converted.</li>
+</ol>
+</li>
+<li>
+<p>Pad left with zeroes to 10 (zfill) the <em>PREM_ID</em>.</p>
+</li>
+<li>
+<p>Format trace records.</p>
+<ol>
+<li><em>trace_id</em> -&gt; “elec_monthly_” + SA_ID </li>
+<li><em>interpretation</em> -&gt; ELECTRICITY_CONSUMPTION_SUPPLIED</li>
+<li>For <em>start</em>, it is necessary to unroll each interval column into a separate line/record. i.e. the value in <code>CDT__1, CDT__2</code> (which should be a converted date value from step 4) should have its own record where it is the start.</li>
+<li>For <em>value</em>, it is necessary to match the <em>CDT<strong>x<em> column in step 6.3 with a value column. i.e. </em>CDT</strong>1</em> matches the value column <em>KWH__1</em>. As previously stated, these belong on their own line/record.</li>
+<li><em>estimated</em> -&gt; False</li>
+<li><em>unit</em> -&gt; KWH</li>
+<li>Check the <em>PREM_ID</em> against the map you created in step 5 of <strong>Project File Preparation</strong> above. Using the project id (or <em>Application No.</em>) as the dictionary key with a list as the value, add the trace id from step a above to that list. You’ll be continuing to build this as you perform additional steps.</li>
+</ol>
+</li>
+</ol>
 <p>This step should yield 164,129 trace records and 7,701 traces.</p>
 <h2 id="daily-gas-use-preparation">Daily Gas Use Preparation</h2>
-<p>The following files are cleaned and formatted in this section:
-1. EES25162_gasdy_160720.csv (daily gas 1 of 2)
-2. EES25162_gasdy_160920.csv (daily gas 2 of 2)</p>
-<p>For each file in the above list, perform the following steps:
-1. Remove the extraneous headers/first two lines of the file.
-2. Convert the dates in the <em>Measurement Date</em> column to <code>yyyy-MM-dd</code> format for sorting purposes.
-3. Sort by <em>Service Point</em>, then by <em>Measurement Date</em>.
-4. Remove duplicate records.
-    1. Since the file is now sorted, if <em>Service Point</em> and <em>Measurement Date</em> match the previous row, discard one of the rows.
-5. Format trace records.
-    1. <em>trace_id</em> -&gt; Service Point
-    2. <em>start</em> -&gt; Measurement Date
-    3. <em>value</em> -&gt; Therms per Day
-    4. <em>interpretation</em> -&gt; NATURAL_GAS_CONSUMPTION_SUPPLIED
-    5. <em>unit</em> -&gt; THERM
-    6. <em>estimated</em> -&gt; False
-    7. Using the map created in electricity step 6 of <strong>Cross Reference File Preparation</strong>, check the <em>Service Point</em> to get a <em>char_prem_id</em>. Check the <em>char_prem_id</em> against the map you created in step 5 of <strong>Project File Preparation</strong> above. Using the project id (or <em>Application No.</em>) as the dictionary key with a list as the value, add the trace id from step a above to that list. You’ll be continuing to build this as you perform additional steps.</p>
+<p>The following files are cleaned and formatted in this section:</p>
+<ol>
+<li>EES25162_gasdy_160720.csv (daily gas 1 of 2)</li>
+<li>EES25162_gasdy_160920.csv (daily gas 2 of 2)</li>
+</ol>
+<p>For each file in the above list, perform the following steps:</p>
+<ol>
+<li>Remove the extraneous headers/first two lines of the file.</li>
+<li>Convert the dates in the <em>Measurement Date</em> column to <code>yyyy-MM-dd</code> format for sorting purposes.</li>
+<li>Sort by <em>Service Point</em>, then by <em>Measurement Date</em>.</li>
+<li>
+<p>Remove duplicate records.</p>
+<ol>
+<li>Since the file is now sorted, if <em>Service Point</em> and <em>Measurement Date</em> match the previous row, discard one of the rows.</li>
+</ol>
+</li>
+<li>
+<p>Format trace records.</p>
+<ol>
+<li><em>trace_id</em> -&gt; Service Point</li>
+<li><em>start</em> -&gt; Measurement Date</li>
+<li><em>value</em> -&gt; Therms per Day</li>
+<li><em>interpretation</em> -&gt; NATURAL_GAS_CONSUMPTION_SUPPLIED</li>
+<li><em>unit</em> -&gt; THERM</li>
+<li><em>estimated</em> -&gt; False</li>
+<li>Using the map created in electricity step 6 of <strong>Cross Reference File Preparation</strong>, check the <em>Service Point</em> to get a <em>char_prem_id</em>. Check the <em>char_prem_id</em> against the map you created in step 5 of <strong>Project File Preparation</strong> above. Using the project id (or <em>Application No.</em>) as the dictionary key with a list as the value, add the trace id from step a above to that list. You’ll be continuing to build this as you perform additional steps.</li>
+</ol>
+</li>
+</ol>
 <p>Optionally, between step 4 and 5 you could split the file into multiple CSVs to make the files easier to work with.</p>
 <p>This step should yield 6,892,834 trace records and 4,223 traces.</p>
 <h2 id="monthly-gas-use-preparation">Monthly Gas Use Preparation</h2>
-<p>The following files are cleaned and formatted in this section:
-1. EES25162.G2RSBL12.XPT (monthly gas 1 of 11)
-2. EES25162.G2RSBL13.XPT (monthly gas 2 of 11)
-3. EES25162.G2RSBL14.XPT (monthly gas 3 of 11)
-4. EES25162.G2RSBL15.XPT (monthly gas 4 of 11)
-5. EES25162.G2RSBL16.XPT (monthly gas 5 of 11)
-6. EES25162.GRESBL12.XPT (monthly gas 6 of 11)
-7. EES25162.GRESBL13.XPT (monthly gas 7 of 11)
-8. EES25162.GRESBL14.XPT (monthly gas 8 of 11)
-9. EES25162.GRESBL15.XPT (monthly gas 9 of 11)
-10. EES25162.GRESBL16.JANJUNE.XPT (monthly gas 10 of 11)
-11. EES25162.GRESBL16.XPT (monthly gas 11 of 11)</p>
+<p>The following files are cleaned and formatted in this section:</p>
+<ol>
+<li>EES25162.G2RSBL12.XPT (monthly gas 1 of 11)</li>
+<li>EES25162.G2RSBL13.XPT (monthly gas 2 of 11)</li>
+<li>EES25162.G2RSBL14.XPT (monthly gas 3 of 11)</li>
+<li>EES25162.G2RSBL15.XPT (monthly gas 4 of 11)</li>
+<li>EES25162.G2RSBL16.XPT (monthly gas 5 of 11)</li>
+<li>EES25162.GRESBL12.XPT (monthly gas 6 of 11)</li>
+<li>EES25162.GRESBL13.XPT (monthly gas 7 of 11)</li>
+<li>EES25162.GRESBL14.XPT (monthly gas 8 of 11)</li>
+<li>EES25162.GRESBL15.XPT (monthly gas 9 of 11)</li>
+<li>EES25162.GRESBL16.JANJUNE.XPT (monthly gas 10 of 11)</li>
+<li>EES25162.GRESBL16.XPT (monthly gas 11 of 11)</li>
+</ol>
 <p>These files are in SAS XPORT format: http://support.sas.com/techsup/technote/ts140.pdf
 Your first step will be to convert these into CSV files to perform operations that, by now, are likely becoming familiar. The Python xport library (https://pypi.python.org/pypi/xport/) is one option for doing this conversion easily.</p>
-<p>For each file in the list above, perform the following:
-1. Convert from XPORT to CSV format.
-2. Sort the file by <em>SA_ID</em>, then by <em>CDT<strong>1<em>.
-3. Remove duplicate records.
-    1. Since the file is now sorted, if </em>SA_ID<em> and </em>CDT</strong>1</em> match the previous record, one of them should be discarded.
-4. Convert the SAS dates.
-    1. SAS dates are represented as a number of days since 1960-Jan-01.
-    2. The file has columns named <code>CDT__1, CDT__2...  CDT__12</code> for the months of the year (as well as <code>THM__1, THM__2... THM__12</code> for the consumption values that correspond to those months). Each of the <em>CDT<strong>x<em> dates needs to be converted.
-5. Format trace records.
-    1. </em>trace_id<em> -&gt; “gas-monthly-” + SA_ID
-    2. </em>interpretation<em> -&gt; NATURAL_GAS_CONSUMPTION_SUPPLIED
-    3. </em>unit<em> -&gt; THERM
-    4. </em>estimated<em> -&gt; False
-    5. For </em>start<em>, it is necessary to unroll each interval column into a separate line/record. i.e. the value in <code>CDT__1, CDT__2</code> (which should be a converted date value from step 4) should have its own record where it is the start.
-    6. For </em>value<em>, it is necessary to match the </em>CDT</strong>x</em> column in step 5.5 with a value column. i.e. <em>CDT<strong>1<em> matches the value column </em>THM</strong>1</em>. As previously stated, these belong on their own line/record.
-    7. Check the <em>PREM_ID</em> against the map you created in step 5 of <strong>Project File Preparation</strong> above. Using the project id (or <em>Application No.</em>) as the dictionary key with a list as the value, add the trace id from step a above to that list. You’ll be continuing to build this as you perform additional steps.</p>
+<p>For each file in the list above, perform the following:</p>
+<ol>
+<li>Convert from XPORT to CSV format.</li>
+<li>Sort the file by <em>SA_ID</em>, then by <em>CDT__1</em>.</li>
+<li>
+<p>Remove duplicate records.</p>
+<ol>
+<li>Since the file is now sorted, if <em>SA_ID</em> and <em>CDT__1</em> match the previous record, one of them should be discarded.</li>
+</ol>
+</li>
+<li>
+<p>Convert the SAS dates.</p>
+<ol>
+<li>SAS dates are represented as a number of days since 1960-Jan-01.</li>
+<li>The file has columns named <code>CDT__1, CDT__2...  CDT__12</code> for the months of the year (as well as <code>THM__1, THM__2... THM__12</code> for the consumption values that correspond to those months). Each of the <em>CDT__x</em> dates needs to be converted.</li>
+</ol>
+</li>
+<li>
+<p>Format trace records.</p>
+<ol>
+<li><em>trace_id</em> -&gt; “gas-monthly-” + SA_ID</li>
+<li><em>interpretation</em> -&gt; NATURAL_GAS_CONSUMPTION_SUPPLIED</li>
+<li><em>unit</em> -&gt; THERM</li>
+<li><em>estimated</em> -&gt; False</li>
+<li>For <em>start</em>, it is necessary to unroll each interval column into a separate line/record. i.e. the value in <code>CDT__1, CDT__2</code> (which should be a converted date value from step 4) should have its own record where it is the start.</li>
+<li>For <em>value</em>, it is necessary to match the <em>CDT<strong>x<em> column in step 5.5 with a value column. i.e. </em>CDT</strong>1</em> matches the value column <em>THM__1</em>. As previously stated, these belong on their own line/record.</li>
+<li>Check the <em>PREM_ID</em> against the map you created in step 5 of <strong>Project File Preparation</strong> above. Using the project id (or <em>Application No.</em>) as the dictionary key with a list as the value, add the trace id from step a above to that list. You’ll be continuing to build this as you perform additional steps.</li>
+</ol>
+</li>
+</ol>
 <p>This step should yield 233,053 trace records and 6,893 traces.</p>
 <h2 id="linking-projects-to-usagetrace-data">Linking Projects to Usage/Trace Data</h2>
 <p>Throughout the process above you've been building a dictionary of projects to traces or outputting files with project to trace mappings as you go. If the former, simply spin through your dictionary and write a single record for each project-trace mapping in a 2 column CSV file with <code>project_id</code> and <code>trace_id</code>. </p>
