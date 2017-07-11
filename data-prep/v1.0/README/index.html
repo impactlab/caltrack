@@ -420,23 +420,23 @@
 </ol>
 </li>
 <li>
-<p>Estimate project dates using the combined file - each project should have a <em>Work Start Date</em> and a <em>Work Finish Date</em>.</p>
+<p>Estimate project dates using the combined file - each project should have a <em>Work Start Date</em> and a <em>Work End Date</em>.</p>
 <ol>
 <li>
 <p>For each row, check if the <em>Notice to Proceed Issued</em> column is blank.</p>
 <ol>
-<li>If it is, this is a project from one of the AHU files. Set the <em>Work Start Date</em> to the <em>Initial Approval Date</em> and the <em>Work Finish Date</em> to the <em>Initial Submission Date</em>.</li>
+<li>If it is, this is a project from one of the AHU files. Set the <em>Work Start Date</em> to the <em>Initial Approval Date</em> and the <em>Work End Date</em> to the <em>Initial Submission Date</em>.</li>
 <li>
 <p>If it is not, this is a project from the AHUP file. Set the <em>Work Start Date</em> to the <em>Notice to Proceed Issued</em>.</p>
 <ol>
-<li>If the <em>Full Application Returned</em> field is blank, set the <em>Work Finish Date</em> to <em>Full Application Submitted</em>.</li>
-<li>Otherwise set <em>Work Finish Date</em> to <em>Full Application Started</em>.</li>
+<li>If the <em>Full Application Returned</em> field is blank, set the <em>Work End Date</em> to <em>Full Application Submitted</em>.</li>
+<li>Otherwise set <em>Work End Date</em> to <em>Full Application Started</em>.</li>
 </ol>
 </li>
 </ol>
 </li>
 <li>
-<p>If after completing step 2a above your <em>Work Finish Date</em> is still blank and your <em>Work Start Date</em> is not, set the <em>Work Finish Date</em> to 60 days after the <em>Work Start Date</em>.</p>
+<p>If after completing step 2a above your <em>Work End Date</em> is still blank and your <em>Work Start Date</em> is not, set the <em>Work End Date</em> to 60 days after the <em>Work Start Date</em>.</p>
 </li>
 </ol>
 </li>
@@ -455,7 +455,7 @@
 <p>If there is more than one project for a <em>char_prem_id</em>, merge the projects.</p>
 <ol>
 <li>Set <em>Work Start Date</em> to the earliest available.</li>
-<li>Set <em>Work Finish Date</em> to the latest available.</li>
+<li>Set <em>Work End Date</em> to the latest available.</li>
 </ol>
 </li>
 </ol>
@@ -469,7 +469,7 @@
 <li><em>project_id</em> -&gt; Application No.</li>
 <li><em>zipcode</em> -&gt; Building ZIP Code</li>
 <li><em>baseline_period_end</em> -&gt; Work Start Date</li>
-<li>reporting_period_start -&gt; Work Finish Date</li>
+<li>reporting_period_start -&gt; Work End Date</li>
 </ol>
 </li>
 </ol>

@@ -247,13 +247,13 @@
 <li>Compute <code>daily_normal_year_gross_savings</code> = <code>predicted_baseline_use - predicted_reporting_use</code> for normal year days</li>
 <li>Sum  <code>daily_normal_year_gross_savings</code> over entire normal year.</li>
 </ol>
-<p><strong>Year one weather normalized metered energy savings from 1 to 12 months after site visit.  (site-level)</strong></p>
+<p><strong>Year one weather normalized metered energy savings from 1 to 12 months after work-end-date.  (site-level)</strong></p>
 <ol>
 <li>Compute <code>predicted_baseline_use</code> for each day after <code>work_end_date</code> until 12 calendar months after <code>work_end_date</code> using the Stage One model from the baseline period and reporting period weather data. Be sure to use balance point temperatures from the baseline model when calculating reporting period HDD and CDD values.</li>
 <li>Compute <code>daily_gross_savings</code> = <code>predicted_baseline_use - actual_daily_use</code> for 12 complete calendar months after <code>work_end_date</code> for project. For days missing consumption data after the date of the intervention, a baseline mask should exclude those days from consideration as part of a savings calculation.</li>
 <li>Sum  <code>daily_gross_savings</code> over the 12 calendar months since <code>work_end_date</code>.</li>
 </ol>
-<p><strong>Year two weather normalized metered energy savings from 13 to 24 months after site visit.  (site-level)</strong></p>
+<p><strong>Year two weather normalized metered energy savings from 13 to 24 months after work-end-date.  (site-level)</strong></p>
 <ol>
 <li>Compute <code>predicted_baseline_use</code> for each day starting 13 months after <code>work_end_date</code> until 24 calendar months after <code>work_end_date</code> using the Stage One model from the baseline period and reporting period weather data. Be sure to use balance point temperatures from the baseline model when calculating reporting period HDD and CDD values.</li>
 <li>Compute <code>daily_gross_savings</code> = <code>predicted_baseline_use - actual_daily_use</code> for month 13 to month 24 after <code>work_end_date</code> for project. For days missing consumption data after the date of the intervention, a baseline mask should exclude those days from consideration as part of a savings calculation.</li>
